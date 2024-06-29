@@ -10,7 +10,7 @@ export abstract class SchemaParser {
       const errorMessage = message.toLowerCase().replace('string must', 'must')
       const field = path[1]
       const formattedErrorMessage = `Field '${field}' ${
-        errorMessage === 'required' ? 'is' + errorMessage : errorMessage
+        errorMessage === 'required' ? 'is ' + errorMessage : errorMessage
       }`
       throw new SchemaParseFailedError(formattedErrorMessage)
     }
