@@ -1,0 +1,51 @@
+{
+  "name": "clean-gympass-node-api",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "dev": "tsx watch --env-file .env src/main/server.ts",
+    "start": "node --env-file .env dist/main/server.js",
+    "build": "tsup",
+    "lint": "eslint --ext .ts src --fix",
+    "lint:staged": "lint-staged",
+    "prepare": "husky || true && cross-shell chmod ug+x .husky/*",
+    "test:dir": "vitest --run --silent --reporter verbose --dir",
+    "test:unit": "vitest --run --passWithNoTests --silent --reporter verbose",
+    "test:e2e": "vitest --run --silent --reporter verbose --dir src/main/routes",
+    "test:int": "vitest --run --passWithNoTests --no-threads --silent --reporter verbose --dir src/main/routes",
+    "test:staged": "vitest related --run",
+    "test:ci": "vitest --run --silent --coverage --passWithNoTests && tsx --env-file .env check-coverage",
+    "migrate:dev": "prisma migrate dev",
+    "migrate:test": "prisma migrate dev",
+    "migrate:dev:reset": "px prisma migrate reset",
+    "migrate:test:reset": "prisma migrate reset",
+    "db:up": "docker-compose up --build -d"
+  },
+  "dependencies": {
+    "@fastify/cors": "9.0.1",
+    "@prisma/client": "5.15.0",
+    "bcrypt": "5.1.1",
+    "cross-shell": "0.1.4",
+    "fastify": "4.27.0",
+    "ioredis": "5.4.1",
+    "tsx": "4.15.4",
+    "zod": "3.23.8"
+  },
+  "devDependencies": {
+    "@rocketseat/eslint-config": "2.2.2",
+    "@total-typescript/ts-reset": "0.5.1",
+    "@types/bcrypt": "5.0.2",
+    "@types/supertest": "6.0.2",
+    "@vitest/coverage-v8": "1.6.0",
+    "eslint": "8.57.0",
+    "husky": "9.0.11",
+    "lint-staged": "15.2.7",
+    "prisma": "5.15.0",
+    "supertest": "7.0.0",
+    "tsup": "8.1.0",
+    "typescript": "5.1.6",
+    "vite": "5.2.13",
+    "vitest": "1.6.0"
+  }
+}
