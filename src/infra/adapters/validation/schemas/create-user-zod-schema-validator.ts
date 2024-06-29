@@ -4,6 +4,10 @@ import type { CreateUserSchemaValidator } from '@/application/validation/schema/
 import type { User } from '@/domain/models/user'
 import { SchemaParser } from '../helpers/schema-parser'
 
+type CreateUserHttpRequest = {
+  body: User
+}
+
 export class CreateUserZodSchemaValidator implements CreateUserSchemaValidator {
   validate(data: unknown): User {
     const schema = z.object({
@@ -13,7 +17,10 @@ export class CreateUserZodSchemaValidator implements CreateUserSchemaValidator {
         password: z.string().min(6),
       }),
     })
-    const validatedData = SchemaParser.parse<User>(schema, data)
-    return validatedData
+    const validatedData = SchemaParser.parse<CreateUserHttpRequest>(
+      schema,
+      data,
+    )
+    return validatedData.body
   }
 }
