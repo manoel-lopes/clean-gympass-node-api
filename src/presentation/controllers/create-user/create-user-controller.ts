@@ -19,7 +19,7 @@ export class CreateUserController {
 
   async handle(req: HttpRequest): Promise<HttpResponse> {
     try {
-      const input = this.createUserSchemaValidator.validate(req.body)
+      const input = this.createUserSchemaValidator.validate(req)
       await this.createUserUseCase.execute(input)
       return created()
     } catch (error) {

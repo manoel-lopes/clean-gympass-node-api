@@ -7,9 +7,11 @@ import { SchemaParser } from '../helpers/schema-parser'
 export class CreateUserZodSchemaValidator implements CreateUserSchemaValidator {
   validate(data: unknown): User {
     const schema = z.object({
-      name: z.string().min(3),
-      email: z.string().email(),
-      password: z.string().min(6),
+      body: z.object({
+        name: z.string().min(3),
+        email: z.string().email(),
+        password: z.string().min(6),
+      }),
     })
     const validatedData = SchemaParser.parse<User>(schema, data)
     return validatedData
