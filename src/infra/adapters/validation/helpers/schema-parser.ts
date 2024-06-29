@@ -9,17 +9,9 @@ export abstract class SchemaParser {
     if (error) {
       const { path, message } = error.errors[0]
       const errorMessage = message.toLowerCase()
-      const isObjectParamError = path.length === 3
-      if (!isObjectParamError) {
-        const field = path[0]
-        throw new SchemaParseFailedError(
-          `Field '${field}' ${errorMessage === 'required' ? 'is ' + errorMessage : errorMessage}`,
-        )
-      }
-
-      const object = path[1]
-      const field = path[2]
-      throw new SchemaParseFailedError(`${object} ${field} ${errorMessage}`)
+      const field = path[1]
+      const formattedErrorMessage = `Field '${field}' ${errorMessage === 'required' ? 'is ' + errorMessage : errorMessage}`
+      throw new SchemaParseFailedError(formattedErrorMessage)
     }
     return parsedSchema.data
   }
