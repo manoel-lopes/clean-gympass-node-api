@@ -1,5 +1,7 @@
 import bcrypt from 'bcrypt'
+
 import type { PasswordEncryptor } from '../ports'
+import { HashingPasswordError, VerifyPasswordError } from '../errors'
 
 export class BcryptPasswordEncryptor implements PasswordEncryptor {
   constructor(private readonly salt = 6) {
@@ -7,10 +9,18 @@ export class BcryptPasswordEncryptor implements PasswordEncryptor {
   }
 
   hashPassword(password: string): Promise<string> {
-    return bcrypt.hash(password, this.salt)
+    try {
+      return bcrypt.hash(password, this.salt)
+    } catch (error) {
+      throw new HashingPasswordError(error.message)
+    }
   }
 
   verifyPassword(password: string, hashedPassword: string): Promise<boolean> {
-    return bcrypt.compare(password, hashedPassword)
+    try {
+      return bcrypt.compare(password, hashedPassword)
+    } catch (error) {
+      throw new VerifyPasswordError(error.message)
+    }
   }
 }
