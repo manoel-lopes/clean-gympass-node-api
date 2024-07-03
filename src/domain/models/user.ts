@@ -3,5 +3,5 @@ export type User = {
   email: string
   name: string
   password: string
-  createAt?: Date | string
+  createdAt?: Date | string
 }

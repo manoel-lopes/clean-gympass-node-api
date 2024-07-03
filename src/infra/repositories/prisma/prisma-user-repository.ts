@@ -11,6 +11,6 @@ export class PrismaUserRepository implements UserRepository {
     const user = await prisma.user.findUnique({ where: { email } })
     if (!user) return null
     const { create_at, ...rest } = user
-    return { ...rest, createAt: create_at }
+    return { ...rest, createdAt: create_at }
   }
 }
