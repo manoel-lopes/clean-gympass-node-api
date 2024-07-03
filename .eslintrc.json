@@ -6,9 +6,22 @@
     "@typescript-eslint/parameter-properties": [
       "error",
       {
-        "allow": ["readonly", "private readonly"]
+        "allow": [
+          "readonly",
+          "private readonly"
+        ]
       }
     ],
     "@typescript-eslint/no-explicit-any": "error"
-  }
+  },
+  "overrides": [
+    {
+      "files": [
+         "*prisma*.ts"
+      ],
+      "rules": {
+        "camelcase": "off"
+      }
+    }
+  ]
 }

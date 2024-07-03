@@ -10,9 +10,7 @@ export class PrismaUserRepository implements UserRepository {
   async findByEmail(email: string): Promise<User | null> {
     const user = await prisma.user.findUnique({ where: { email } })
     if (!user) return null
-    // eslint-disable-next-line camelcase
     const { create_at, ...rest } = user
-    // eslint-disable-next-line camelcase
     return { ...rest, createAt: create_at }
   }
 }
