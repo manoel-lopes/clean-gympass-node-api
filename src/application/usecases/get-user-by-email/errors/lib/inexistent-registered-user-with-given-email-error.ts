@@ -1,0 +1,6 @@
+export class InexistentRegisteredUserWithGivenEmailError extends Error {
+  constructor(email: string) {
+    super(`There's no registered user with email '${email}'`)
+    this.name = 'InexistentRegisteredUserWithGivenEmailError'
+  }
+}
