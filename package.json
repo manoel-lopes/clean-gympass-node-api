@@ -9,7 +9,7 @@
     "build": "tsup",
     "lint": "eslint --ext .ts src --fix",
     "lint:staged": "lint-staged",
-    "prepare": "husky || true && cross-shell chmod ug+x .husky/*",
+    "prepare": "husky",
     "test:dir": "vitest --run --silent --reporter verbose --dir",
     "test:unit": "vitest --run --passWithNoTests --silent --reporter verbose",
     "test:e2e": "vitest --run --silent --reporter verbose --dir src/main/routes",
