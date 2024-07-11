@@ -1,5 +1,3 @@
-import { vi, describe, it, expect } from 'vitest'
-
 import type { User } from '@/domain/models/user'
 import type { CreateUser } from '@/domain/usecases/create-user'
 import type { CreateUserSchemaValidator } from '@/application/validation/schema/create-user-schema-validator'
