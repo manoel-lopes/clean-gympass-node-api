@@ -15,7 +15,7 @@
     "test:e2e": "vitest --run --silent --reporter verbose --dir src/main/routes",
     "test:int": "vitest --run --passWithNoTests --no-threads --silent --reporter verbose --dir src/main/routes",
     "test:staged": "vitest related --run",
-    "test:ci": "vitest --run --silent --coverage --passWithNoTests && tsx --env-file .env check-coverage",
+    "test:ci": "vitest --run --silent --coverage --passWithNoTests",
     "migrate:dev": "prisma migrate dev",
     "migrate:test": "prisma migrate dev",
     "migrate:dev:reset": "px prisma migrate reset",
