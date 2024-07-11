@@ -15,7 +15,7 @@ function makeSut(): Sut {
   return { sut }
 }
 
-describe('GetUserByEmailUseCase', async () => {
+describe('GetUserByEmailUseCase', () => {
   it('should throw an error if there is not a user with the given email', () => {
     const email = 'any_email'
     const { sut } = makeSut()
