@@ -3,7 +3,7 @@ import { vi, describe, it, expect } from 'vitest'
 import type { User } from '@/domain/models/user'
 import type { CreateUser } from '@/domain/usecases/create-user'
 import type { CreateUserSchemaValidator } from '@/application/validation/schema/create-user-schema-validator'
-import { EmailAlreadyBeingUsedError } from '@/application/usecases/create-user/errors'
+import { EmailAlreadyBeingUsedError } from '@/application/usecases/app/create-user/errors'
 import {
   badRequest,
   conflict,
