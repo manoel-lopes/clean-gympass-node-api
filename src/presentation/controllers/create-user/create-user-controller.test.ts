@@ -67,6 +67,7 @@ describe('CreateUserController', () => {
 
     const httpResponse = await sut.handle(httpRequest)
 
+    expect(httpResponse.statusCode).toBe(409)
     expect(httpResponse).toEqual(
       conflict(new EmailAlreadyBeingUsedError('any_email')),
     )
@@ -79,6 +80,8 @@ describe('CreateUserController', () => {
     )
 
     const httpResponse = await sut.handle(httpRequest)
+
+    expect(httpResponse.statusCode).toBe(400)
     expect(httpResponse).toEqual(
       badRequest(new HashingPasswordError('any_error')),
     )
@@ -95,7 +98,10 @@ describe('CreateUserController', () => {
 
   it('should return 201 on success', async () => {
     const { sut } = makeSut()
+
     const httpResponse = await sut.handle(httpRequest)
+
+    expect(httpResponse.statusCode).toBe(201)
     expect(httpResponse).toEqual(created())
   })
 })
