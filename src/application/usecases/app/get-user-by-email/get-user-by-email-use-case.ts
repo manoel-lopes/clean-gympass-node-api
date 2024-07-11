@@ -1,6 +1,6 @@
+import type { User } from '@/domain/models/user'
 import type { GetUserByEmail } from '@/domain/usecases/get-user-by-email'
 import type { UserRepository } from '@/application/repositories/user-repository'
-import type { User } from '@/domain/models/user'
 import { InexistentRegisteredUserWithGivenEmailError } from './errors'
 
 export class GetUserByEmailUseCase implements GetUserByEmail {

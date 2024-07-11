@@ -1,5 +1,5 @@
-import type { CreateUser } from '@/domain/usecases/create-user'
 import type { User } from '@/domain/models/user'
+import type { CreateUser } from '@/domain/usecases/create-user'
 import type { UserRepository } from '@/application/repositories/user-repository'
 import type { PasswordEncryptor } from '@/infra/adapters/password-encryptor/ports'
 import { EmailAlreadyBeingUsedError } from './errors'
