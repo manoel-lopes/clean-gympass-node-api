@@ -59,7 +59,7 @@ describe('CreateUserController', () => {
 
   it('should return 409 if already has a user registered with the same email', async () => {
     const { sut, createUserUseCase } = makeSut()
-    vi.spyOn(createUserUseCase, 'execute').mockRejectedValueOnce(
+    vi.spyOn(createUserUseCase, 'execute').mockRejectedValue(
       new EmailAlreadyBeingUsedError('any_email'),
     )
 
@@ -73,7 +73,7 @@ describe('CreateUserController', () => {
 
   it('should return 400 if password hashing fails', async () => {
     const { sut, createUserUseCase } = makeSut()
-    vi.spyOn(createUserUseCase, 'execute').mockRejectedValueOnce(
+    vi.spyOn(createUserUseCase, 'execute').mockRejectedValue(
       new HashingPasswordError('any_error'),
     )
 
@@ -96,7 +96,7 @@ describe('CreateUserController', () => {
 
   it('should throw the error if is not a known error', async () => {
     const { sut, createUserUseCase } = makeSut()
-    vi.spyOn(createUserUseCase, 'execute').mockRejectedValueOnce(
+    vi.spyOn(createUserUseCase, 'execute').mockRejectedValue(
       new Error('any_error'),
     )
 

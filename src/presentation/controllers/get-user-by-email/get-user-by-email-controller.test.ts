@@ -54,7 +54,7 @@ describe('GetUserByEmailController', () => {
 
   it('should return 404 if there is not a user with the given email', async () => {
     const { sut, getUserByEmailUseCase } = makeSut()
-    vi.spyOn(getUserByEmailUseCase, 'execute').mockRejectedValueOnce(
+    vi.spyOn(getUserByEmailUseCase, 'execute').mockRejectedValue(
       new InexistentRegisteredUserWithGivenEmailError('any_email'),
     )
 
@@ -79,7 +79,7 @@ describe('GetUserByEmailController', () => {
 
   it('should throw the error if is not a known error', async () => {
     const { sut, getUserByEmailUseCase } = makeSut()
-    vi.spyOn(getUserByEmailUseCase, 'execute').mockRejectedValueOnce(
+    vi.spyOn(getUserByEmailUseCase, 'execute').mockRejectedValue(
       new Error('any_error'),
     )
 

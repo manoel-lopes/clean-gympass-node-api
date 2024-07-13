@@ -53,7 +53,7 @@ describe('CreateUserUseCase', () => {
 
   it('should throw an error if the password hashing fails', async () => {
     const { sut, passwordEncryptorStub } = makeSut()
-    vi.spyOn(passwordEncryptorStub, 'hashPassword').mockRejectedValueOnce(
+    vi.spyOn(passwordEncryptorStub, 'hashPassword').mockRejectedValue(
       new HashingPasswordError('any_error'),
     )
     const input = {
