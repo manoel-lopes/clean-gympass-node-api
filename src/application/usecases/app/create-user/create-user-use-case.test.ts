@@ -83,7 +83,6 @@ describe('CreateUserUseCase', () => {
     expect(user.id).toEqual(expect.any(String))
     expect(user.name).toBe('any_name')
     expect(user.email).toBe('any_email')
-    expect(user.password).toBe('hashed_password')
     expect(new Date(user.createdAt ?? '').getTime()).not.toBeNaN()
   })
 })

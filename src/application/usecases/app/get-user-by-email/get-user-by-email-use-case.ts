@@ -1,5 +1,7 @@
-import type { User } from '@/domain/models/user'
-import type { GetUserByEmail } from '@/domain/usecases/get-user-by-email'
+import type {
+  GetUserByEmail,
+  GetUserByEmailResponse,
+} from '@/domain/usecases/get-user-by-email'
 import type { UserRepository } from '@/application/repositories/user-repository'
 import { InexistentRegisteredUserWithGivenEmailError } from './errors'
 
@@ -8,11 +10,17 @@ export class GetUserByEmailUseCase implements GetUserByEmail {
     Object.freeze(this)
   }
 
-  async execute(email: string): Promise<User> {
+  async execute(email: string): Promise<GetUserByEmailResponse> {
     const user = await this.userRepository.findByEmail(email)
     if (!user) {
       throw new InexistentRegisteredUserWithGivenEmailError(email)
     }
-    return user
+
+    return {
+      id: user.id,
+      email: user.email,
+      name: user.name,
+      createdAt: user.createdAt.toLocaleString(),
+    }
   }
 }
