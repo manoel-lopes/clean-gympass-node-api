@@ -4,7 +4,7 @@ import type { UserRepository } from '@/application/repositories/user-repository'
 import type { User } from '@/domain/models/user'
 
 export class InMemoryUserRepository implements UserRepository {
-  private users: User[] = []
+  private users: Required<User>[] = []
 
   async save(userData: User): Promise<void> {
     this.users.push({
@@ -14,7 +14,7 @@ export class InMemoryUserRepository implements UserRepository {
     })
   }
 
-  async findByEmail(email: string): Promise<User | null> {
+  async findByEmail(email: string): Promise<Required<User> | null> {
     return this.users.find((user) => user.email === email) || null
   }
 }

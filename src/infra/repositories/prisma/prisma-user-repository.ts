@@ -4,10 +4,11 @@ import { prisma } from '@/infra/db/client'
 
 export class PrismaUserRepository implements UserRepository {
   async save(userData: User): Promise<void> {
-    await prisma.user.create({ data: userData })
+    const { name, email, password } = userData
+    await prisma.user.create({ data: { name, email, password } })
   }
 
-  async findByEmail(email: string): Promise<User | null> {
+  async findByEmail(email: string): Promise<Required<User> | null> {
     const user = await prisma.user.findUnique({ where: { email } })
     if (!user) return null
     const { created_at, ...rest } = user

@@ -2,5 +2,5 @@ import type { User } from '@/domain/models/user'
 
 export type UserRepository = {
   save(userData: User): Promise<void>
-  findByEmail(email: string): Promise<User | null>
+  findByEmail(email: string): Promise<Required<User> | null>
 }
