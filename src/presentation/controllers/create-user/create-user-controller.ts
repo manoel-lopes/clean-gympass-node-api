@@ -19,8 +19,8 @@ export class CreateUserController {
 
   async handle(req: HttpRequest): Promise<HttpResponse> {
     try {
-      const input = this.createUserSchemaValidator.validate(req)
-      await this.createUserUseCase.execute(input)
+      const request = this.createUserSchemaValidator.validate(req)
+      await this.createUserUseCase.execute(request)
       return created()
     } catch (error) {
       if (error instanceof EmailAlreadyBeingUsedError) {

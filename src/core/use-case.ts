@@ -1,3 +1,3 @@
-export type UseCase<Input = unknown, Output = void> = {
-  execute(input: Input): Promise<Output>
+export type UseCase<Request = unknown, Response = void> = {
+  execute(req: Request): Promise<Response>
 }

@@ -14,8 +14,8 @@ export class CreateUserUseCase implements CreateUser {
     Object.freeze(this)
   }
 
-  async execute(re: CreateUserRequest): Promise<void> {
-    const { name, email, password } = re
+  async execute(req: CreateUserRequest): Promise<void> {
+    const { name, email, password } = req
     const hashedPassword = await this.passwordEncryptor.hashPassword(password)
     const hasUserWithEmail = await this.userRepository.findByEmail(email)
     if (hasUserWithEmail) {

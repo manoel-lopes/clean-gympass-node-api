@@ -14,8 +14,8 @@ export class GetUserByEmailController {
 
   async handle(req: HttpRequest): Promise<HttpResponse> {
     try {
-      const input = this.getUserByEmailSchemaValidator.validate(req)
-      const response = await this.getUserByEmailUseCase.execute(input.email)
+      const request = this.getUserByEmailSchemaValidator.validate(req)
+      const response = await this.getUserByEmailUseCase.execute(request.email)
       return ok(response)
     } catch (error) {
       if (error instanceof InexistentRegisteredUserWithGivenEmailError) {
