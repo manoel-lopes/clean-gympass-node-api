@@ -4,28 +4,36 @@ import { SchemaParseFailedError } from '../errors'
 export abstract class SchemaParser {
   static parse<T>(schema: z.Schema, data: unknown): T {
     const parsedSchema = schema.safeParse(data)
-    const { error } = parsedSchema
-    if (error) {
-      const { path, message } = error.errors[0]
-      const errorMessage = message.toLowerCase().replace('string must', 'must')
-      const field = path[1]
-      const object = path[0]
-      let formattedErrorMessage = ''
-      if (!field) {
-        formattedErrorMessage = `Empty request ${object}`
-      } else {
-        if (errorMessage.includes('invalid')) {
-          formattedErrorMessage = `${errorMessage.charAt(0).toUpperCase() + errorMessage.slice(1)} on request ${
-            object === 'query' ? 'query params' : object
-          }`
-        } else {
-          formattedErrorMessage = `Field '${field}' ${
-            errorMessage === 'required' ? 'is ' + errorMessage : errorMessage
-          }`
-        }
-      }
-      throw new SchemaParseFailedError(formattedErrorMessage)
+    if (parsedSchema.success) {
+      return parsedSchema.data
     }
-    return parsedSchema.data
+
+    const { path, message } = parsedSchema.error.errors[0]
+    const errorMessage = this.formatErrorMessage(path, message)
+    throw new SchemaParseFailedError(errorMessage)
+  }
+
+  private static formatErrorMessage(
+    path: (string | number)[],
+    message: string,
+  ): string {
+    const [object, field] = path
+    const normalizedMessage = message
+      .toLowerCase()
+      .replace('string must', 'must')
+
+    if (!field) {
+      return `Empty request ${object}`
+    }
+
+    if (normalizedMessage.includes('invalid')) {
+      return `${this.capitalizeFirstLetter(normalizedMessage)} on request ${object === 'query' ? 'query params' : object}`
+    }
+
+    return `Field '${field}' ${normalizedMessage === 'required' ? 'is ' + normalizedMessage : normalizedMessage}`
+  }
+
+  private static capitalizeFirstLetter(text: string): string {
+    return text.charAt(0).toUpperCase() + text.slice(1)
   }
 }
