@@ -1,5 +1,7 @@
-import type { User } from '@/domain/models/user'
-import type { CreateUser } from '@/domain/usecases/create-user'
+import type {
+  CreateUser,
+  CreateUserRequest,
+} from '@/domain/usecases/create-user'
 import type { UserRepository } from '@/application/repositories/user-repository'
 import type { PasswordEncryptor } from '@/infra/adapters/password-encryptor/ports'
 import { EmailAlreadyBeingUsedError } from './errors'
@@ -12,8 +14,8 @@ export class CreateUserUseCase implements CreateUser {
     Object.freeze(this)
   }
 
-  async execute(input: User): Promise<void> {
-    const { name, email, password } = input
+  async execute(re: CreateUserRequest): Promise<void> {
+    const { name, email, password } = re
     const hashedPassword = await this.passwordEncryptor.hashPassword(password)
     const hasUserWithEmail = await this.userRepository.findByEmail(email)
     if (hasUserWithEmail) {

@@ -1,15 +1,15 @@
 import { z } from 'zod'
 
+import type { CreateUserRequest as CreateUserRequestBody } from '@/domain/usecases/create-user'
 import type { CreateUserSchemaValidator } from '@/application/validation/schema/create-user-schema-validator'
-import type { User } from '@/domain/models/user'
 import { SchemaParser } from '../helpers/schema-parser'
 
 type CreateUserRequest = {
-  body: User
+  body: CreateUserRequestBody
 }
 
 export class CreateUserZodSchemaValidator implements CreateUserSchemaValidator {
-  validate(data: unknown): User {
+  validate(data: unknown): CreateUserRequestBody {
     const schema = z.object({
       body: z.object({
         name: z.string().min(3),

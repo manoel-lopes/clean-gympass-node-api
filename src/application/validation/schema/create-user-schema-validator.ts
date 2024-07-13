@@ -1,4 +1,4 @@
-import type { User } from '@/domain/models/user'
+import type { CreateUserRequest } from '@/domain/usecases/create-user'
 import type { SchemaValidator } from '@/infra/adapters/validation/schemas/ports'
 
-export type CreateUserSchemaValidator = SchemaValidator<User>
+export type CreateUserSchemaValidator = SchemaValidator<CreateUserRequest>
