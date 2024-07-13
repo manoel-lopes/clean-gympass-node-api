@@ -15,12 +15,12 @@ export class GetUserByEmailUseCase implements GetUserByEmail {
     if (!user) {
       throw new InexistentRegisteredUserWithGivenEmailError(email)
     }
-
-    return {
+    const formattedUser = {
       id: user.id,
-      email: user.email,
       name: user.name,
-      createdAt: user.createdAt.toLocaleString(),
+      email: user.email,
+      createdAt: new Date(user.createdAt).toISOString(),
     }
+    return formattedUser
   }
 }
