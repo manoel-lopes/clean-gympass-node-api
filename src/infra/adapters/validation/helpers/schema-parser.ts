@@ -14,9 +14,15 @@ export abstract class SchemaParser {
       if (!field) {
         formattedErrorMessage = `Empty request ${object}`
       } else {
-        formattedErrorMessage = `Field '${field}' ${
-          errorMessage === 'required' ? 'is ' + errorMessage : errorMessage
-        }`
+        if (errorMessage.includes('invalid')) {
+          formattedErrorMessage = `${errorMessage.charAt(0).toUpperCase() + errorMessage.slice(1)} on request ${
+            object === 'query' ? 'query params' : object
+          }`
+        } else {
+          formattedErrorMessage = `Field '${field}' ${
+            errorMessage === 'required' ? 'is ' + errorMessage : errorMessage
+          }`
+        }
       }
       throw new SchemaParseFailedError(formattedErrorMessage)
     }
