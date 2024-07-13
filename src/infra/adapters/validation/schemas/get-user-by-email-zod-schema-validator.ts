@@ -6,7 +6,7 @@ import type {
 } from '@/application/validation/schema/get-user-by-email-schema-validator'
 import { SchemaParser } from '../helpers/schema-parser'
 
-type GetUserByEmailRequest = {
+type GetUserByEmailHttpRequest = {
   params: GetUserByEmailRequestParams
 }
 
@@ -19,7 +19,7 @@ export class GetUserByEmailZodSchemaValidator
         email: z.string().email(),
       }),
     })
-    const validatedData = SchemaParser.parse<GetUserByEmailRequest>(
+    const validatedData = SchemaParser.parse<GetUserByEmailHttpRequest>(
       schema,
       data,
     )

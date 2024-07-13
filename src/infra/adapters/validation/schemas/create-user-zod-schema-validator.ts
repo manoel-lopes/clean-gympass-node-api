@@ -1,15 +1,15 @@
 import { z } from 'zod'
 
-import type { CreateUserRequest as CreateUserRequestBody } from '@/domain/usecases/create-user'
+import type { CreateUserRequest } from '@/domain/usecases/create-user'
 import type { CreateUserSchemaValidator } from '@/application/validation/schema/create-user-schema-validator'
 import { SchemaParser } from '../helpers/schema-parser'
 
-type CreateUserRequest = {
-  body: CreateUserRequestBody
+type CreateUserHttpRequest = {
+  body: CreateUserRequest
 }
 
 export class CreateUserZodSchemaValidator implements CreateUserSchemaValidator {
-  validate(data: unknown): CreateUserRequestBody {
+  validate(data: unknown): CreateUserRequest {
     const schema = z.object({
       body: z.object({
         name: z.string().min(3),
@@ -17,7 +17,10 @@ export class CreateUserZodSchemaValidator implements CreateUserSchemaValidator {
         password: z.string().min(6),
       }),
     })
-    const validatedData = SchemaParser.parse<CreateUserRequest>(schema, data)
+    const validatedData = SchemaParser.parse<CreateUserHttpRequest>(
+      schema,
+      data,
+    )
     return validatedData.body
   }
 }
