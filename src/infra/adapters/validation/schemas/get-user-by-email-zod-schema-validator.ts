@@ -10,7 +10,9 @@ type GetUserByEmailRequest = {
   params: GetUserByEmailRequestParams
 }
 
-export class ZodSchemaValidator implements GetUserByEmailSchemaValidator {
+export class GetUserByEmailZodSchemaValidator
+  implements GetUserByEmailSchemaValidator
+{
   validate(data: unknown) {
     const schema = z.object({
       params: z.object({
