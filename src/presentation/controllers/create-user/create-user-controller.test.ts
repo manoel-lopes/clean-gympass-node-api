@@ -85,6 +85,15 @@ describe('CreateUserController', () => {
     )
   })
 
+  it('should throw a schema validation error', async () => {
+    const { sut, createUserSchemaValidator } = makeSut()
+    vi.spyOn(createUserSchemaValidator, 'validate').mockImplementation(() => {
+      throw new Error('any_error')
+    })
+
+    expect(sut.handle(httpRequest)).rejects.toThrow(new Error('any_error'))
+  })
+
   it('should throw the error if is not a known error', async () => {
     const { sut, createUserUseCase } = makeSut()
     vi.spyOn(createUserUseCase, 'execute').mockRejectedValueOnce(
