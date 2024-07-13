@@ -8,7 +8,7 @@ const app = new FastifyAdapter()
 setRoutes(app)
 app.setErrorHandler((error, _, res) => {
   if (error instanceof SchemaParseFailedError) {
-    return res.status(400).json({ error: error.message })
+    return res.status(400).json({ error: { message: error.message } })
   }
 
   if (env.NODE_ENV !== 'production') {
