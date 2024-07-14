@@ -1,8 +1,8 @@
 import type { UseCase } from '@/core/use-case'
 import type { UserRepository } from '@/application/repositories/user-repository'
 import type { PasswordEncryptor } from '@/infra/adapters/password-encryptor/ports'
-import { EmailAlreadyBeingUsedError } from './errors'
 import type { CreateUserRequest } from './ports'
+import { EmailAlreadyBeingUsedError } from './errors'
 
 export class CreateUserUseCase implements UseCase {
   constructor(
