@@ -1,6 +1,6 @@
 import type { UseCase } from '@/core/use-case'
 import type { GetUserByEmailResponse } from '@/application/usecases/app/get-user-by-email/ports'
-import { InexistentRegisteredUserWithGivenEmailError } from '@/application/usecases/app/get-user-by-email/errors'
+import { InexistentRegisteredUserWithEmailError } from '@/application/errors'
 import type { SchemaValidator } from '@/infra/adapters/validation/schemas/ports'
 import { notFound, ok } from '@/presentation/helpers/http-helpers'
 import { GetUserByEmailController } from './get-user-by-email-controller'
@@ -53,14 +53,14 @@ describe('GetUserByEmailController', () => {
   it('should return 404 if there is not a user with the given email', async () => {
     const { sut, getUserByEmailUseCase } = makeSut()
     vi.spyOn(getUserByEmailUseCase, 'execute').mockRejectedValue(
-      new InexistentRegisteredUserWithGivenEmailError('any_email'),
+      new InexistentRegisteredUserWithEmailError('any_email'),
     )
 
     const httpResponse = await sut.handle(httpRequest)
 
     expect(httpResponse.statusCode).toBe(404)
     expect(httpResponse).toEqual(
-      notFound(new InexistentRegisteredUserWithGivenEmailError('any_email')),
+      notFound(new InexistentRegisteredUserWithEmailError('any_email')),
     )
   })
 
