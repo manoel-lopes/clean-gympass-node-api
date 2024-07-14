@@ -29,7 +29,6 @@ type Sut = {
 function makeSut(): Sut {
   const passwordEncryptorStub = makePasswordEncryptorStub()
   const userRepository = new InMemoryUserRepository()
-
   const createUserUseCase = new CreateUserUseCase(
     userRepository,
     passwordEncryptorStub,
