@@ -1,13 +1,11 @@
 import { vi, describe, it, expect } from 'vitest'
 
-import type { CreateUser } from '@/domain/usecases/create-user'
 import type { PasswordEncryptor } from '@/infra/adapters/password-encryptor/ports'
 import { HashingPasswordError } from '@/infra/adapters/password-encryptor/errors'
 import { InMemoryUserRepository } from '@/infra/repositories/in-memory/in-memory-user-repository'
-import { CreateUserUseCase } from './create-user-use-case'
-import { EmailAlreadyBeingUsedError } from './errors'
-import type { GetUserByEmail } from '@/domain/usecases/get-user-by-email'
 import { GetUserByEmailUseCase } from '../get-user-by-email/get-user-by-email-use-case'
+import { EmailAlreadyBeingUsedError } from './errors'
+import { CreateUserUseCase } from './create-user-use-case'
 
 function makePasswordEncryptorStub(): PasswordEncryptor {
   class PasswordEncryptorStub implements PasswordEncryptor {
@@ -23,8 +21,8 @@ function makePasswordEncryptorStub(): PasswordEncryptor {
 }
 
 type Sut = {
-  sut: CreateUser
-  getUserByEmailUseCase: GetUserByEmail
+  sut: CreateUserUseCase
+  getUserByEmailUseCase: GetUserByEmailUseCase
   passwordEncryptorStub: PasswordEncryptor
 }
 
@@ -37,16 +35,17 @@ function makeSut(): Sut {
 }
 
 describe('CreateUserUseCase', () => {
+  const request = {
+    name: 'any_name',
+    email: 'any_email',
+    password: 'any_password',
+  }
+
   it('should throw an error if already has a user registered with the same email', async () => {
     const { sut } = makeSut()
-    const input = {
-      name: 'any_name',
-      email: 'any_email',
-      password: 'any_password',
-    }
-    await sut.execute(input)
+    await sut.execute(request)
 
-    await expect(sut.execute(input)).rejects.toThrowError(
+    await expect(sut.execute(request)).rejects.toThrowError(
       new EmailAlreadyBeingUsedError('any_email'),
     )
   })
@@ -56,28 +55,18 @@ describe('CreateUserUseCase', () => {
     vi.spyOn(passwordEncryptorStub, 'hashPassword').mockRejectedValue(
       new HashingPasswordError('any_error'),
     )
-    const input = {
-      name: 'any_name',
-      email: 'any_email',
-      password: 'any_password',
-    }
 
-    await expect(sut.execute(input)).rejects.toThrowError(
+    await expect(sut.execute(request)).rejects.toThrowError(
       new HashingPasswordError('any_error'),
     )
   })
 
   it('should correctly create a new user', async () => {
-    const input = {
-      name: 'any_name',
-      email: 'any_email',
-      password: 'any_password',
-    }
     const { sut, getUserByEmailUseCase, passwordEncryptorStub } = makeSut()
     const passwordEncryptorSpy = vi.spyOn(passwordEncryptorStub, 'hashPassword')
 
-    await sut.execute(input)
-    const user = await getUserByEmailUseCase.execute('any_email')
+    await sut.execute(request)
+    const user = await getUserByEmailUseCase.execute({ email: 'any_email' })
 
     expect(passwordEncryptorSpy).toHaveBeenCalledWith('any_password')
     expect(user.id).toEqual(expect.any(String))

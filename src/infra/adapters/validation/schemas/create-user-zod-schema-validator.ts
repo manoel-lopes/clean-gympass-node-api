@@ -1,6 +1,6 @@
 import { z } from 'zod'
 
-import type { CreateUserRequest } from '@/domain/usecases/create-user'
+import type { CreateUserRequest } from '@/application/usecases/app/create-user/ports'
 import type { CreateUserSchemaValidator } from '@/application/validation/schema/create-user-schema-validator'
 import { SchemaParser } from '../helpers/schema-parser'
 

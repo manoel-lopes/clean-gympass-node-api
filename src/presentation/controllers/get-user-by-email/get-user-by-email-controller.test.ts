@@ -1,19 +1,19 @@
-import type { User } from '@/domain/models/user'
-import type { GetUserByEmail } from '@/domain/usecases/get-user-by-email'
+import type { UseCase } from '@/core/use-case'
+import type { GetUserByEmailResponse } from '@/application/usecases/app/get-user-by-email/ports'
+import type { GetUserByEmailSchemaValidator } from '@/application/validation/schema/get-user-by-email-schema-validator'
 import { InexistentRegisteredUserWithGivenEmailError } from '@/application/usecases/app/get-user-by-email/errors'
 import { notFound, ok } from '@/presentation/helpers/http-helpers'
-import type { GetUserByEmailSchemaValidator } from '@/application/validation/schema/get-user-by-email-schema-validator'
 import { GetUserByEmailController } from './get-user-by-email-controller'
 
 type Sut = {
   sut: GetUserByEmailController
-  getUserByEmailUseCase: GetUserByEmail
+  getUserByEmailUseCase: UseCase
   getUserByEmailSchemaValidator: GetUserByEmailSchemaValidator
 }
 
-function makeGetUserByEmailSub(): GetUserByEmail {
-  class GetUserByEmailStub implements GetUserByEmail {
-    async execute(): Promise<User> {
+function makeGetUserByEmailSub(): UseCase {
+  class GetUserByEmailStub implements UseCase {
+    async execute(): Promise<GetUserByEmailResponse> {
       return Promise.resolve({
         id: 'any_id',
         name: 'any_name',

@@ -1,4 +1,3 @@
-import type { CreateUser } from '@/domain/usecases/create-user'
 import type { CreateUserSchemaValidator } from '@/application/validation/schema/create-user-schema-validator'
 import type { HttpRequest, HttpResponse } from '@/infra/adapters/http/ports'
 import {
@@ -8,10 +7,11 @@ import {
 } from '@/presentation/helpers/http-helpers'
 import { EmailAlreadyBeingUsedError } from '@/application/usecases/app/create-user/errors'
 import { HashingPasswordError } from '@/infra/adapters/password-encryptor/errors'
+import type { UseCase } from '@/core/use-case'
 
 export class CreateUserController {
   constructor(
-    private readonly createUserUseCase: CreateUser,
+    private readonly createUserUseCase: UseCase,
     private readonly createUserSchemaValidator: CreateUserSchemaValidator,
   ) {
     Object.freeze(this)

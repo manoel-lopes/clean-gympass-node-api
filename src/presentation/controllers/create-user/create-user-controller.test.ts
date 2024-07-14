@@ -1,23 +1,23 @@
-import type { User } from '@/domain/models/user'
-import type { CreateUser } from '@/domain/usecases/create-user'
+import type { UseCase } from '@/core/use-case'
+import type { CreateUserRequest } from '@/application/usecases/app/create-user/ports'
 import type { CreateUserSchemaValidator } from '@/application/validation/schema/create-user-schema-validator'
 import { EmailAlreadyBeingUsedError } from '@/application/usecases/app/create-user/errors'
+import { HashingPasswordError } from '@/infra/adapters/password-encryptor/errors'
 import {
   badRequest,
   conflict,
   created,
 } from '@/presentation/helpers/http-helpers'
-import { HashingPasswordError } from '@/infra/adapters/password-encryptor/errors'
 import { CreateUserController } from './create-user-controller'
 
 type Sut = {
   sut: CreateUserController
-  createUserUseCase: CreateUser
+  createUserUseCase: UseCase
   createUserSchemaValidator: CreateUserSchemaValidator
 }
 
-function makeCreateUserSub(): CreateUser {
-  class CreateUserStub implements CreateUser {
+function makeCreateUserSub(): UseCase {
+  class CreateUserStub implements UseCase {
     async execute(): Promise<void> {
       return Promise.resolve()
     }
@@ -27,7 +27,7 @@ function makeCreateUserSub(): CreateUser {
 
 function makeCreateUserSchemaValidatorStub(): CreateUserSchemaValidator {
   class CreateUserSchemaValidatorStub implements CreateUserSchemaValidator {
-    validate(): User {
+    validate(): CreateUserRequest {
       return {
         name: 'any_name',
         email: 'any_email',

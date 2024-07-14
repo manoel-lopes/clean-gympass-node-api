@@ -1,13 +1,11 @@
 import { z } from 'zod'
 
-import type {
-  GetUserByEmailRequestParams,
-  GetUserByEmailSchemaValidator,
-} from '@/application/validation/schema/get-user-by-email-schema-validator'
+import type { GetUserByEmailSchemaValidator } from '@/application/validation/schema/get-user-by-email-schema-validator'
+import type { GetUserByEmailRequest } from '@/application/usecases/app/get-user-by-email/ports'
 import { SchemaParser } from '../helpers/schema-parser'
 
 type GetUserByEmailHttpRequest = {
-  params: GetUserByEmailRequestParams
+  params: GetUserByEmailRequest
 }
 
 export class GetUserByEmailZodSchemaValidator

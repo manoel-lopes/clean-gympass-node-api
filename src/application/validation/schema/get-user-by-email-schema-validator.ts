@@ -1,8 +1,5 @@
 import type { SchemaValidator } from '@/infra/adapters/validation/schemas/ports'
-
-export type GetUserByEmailRequestParams = {
-  email: string
-}
+import type { GetUserByEmailRequest } from '@/application/usecases/app/get-user-by-email/ports'
 
 export type GetUserByEmailSchemaValidator =
-  SchemaValidator<GetUserByEmailRequestParams>
+  SchemaValidator<GetUserByEmailRequest>

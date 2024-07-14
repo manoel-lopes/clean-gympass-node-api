@@ -1,12 +1,12 @@
 import { describe, it, expect } from 'vitest'
 
-import type { GetUserByEmail } from '@/domain/usecases/get-user-by-email'
+import type { UseCase } from '@/core/use-case'
 import { InMemoryUserRepository } from '@/infra/repositories/in-memory/in-memory-user-repository'
 import { GetUserByEmailUseCase } from './get-user-by-email-use-case'
 import { InexistentRegisteredUserWithGivenEmailError } from './errors'
 
 type Sut = {
-  sut: GetUserByEmail
+  sut: UseCase
 }
 
 function makeSut(): Sut {
@@ -20,7 +20,7 @@ describe('GetUserByEmailUseCase', () => {
     const email = 'any_email'
     const { sut } = makeSut()
 
-    expect(sut.execute(email)).rejects.toThrowError(
+    expect(sut.execute({ email })).rejects.toThrowError(
       new InexistentRegisteredUserWithGivenEmailError(email),
     )
   })
