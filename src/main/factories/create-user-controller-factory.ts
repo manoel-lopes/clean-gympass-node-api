@@ -1,7 +1,7 @@
 import { PrismaUserRepository } from '@/infra/repositories/prisma/prisma-user-repository'
 import { BcryptPasswordEncryptor } from '@/infra/adapters/password-encryptor/bcrypt/bcrypt-password-encryptor'
 import { CreateUserUseCase } from '@/application/usecases/app/create-user/create-user-use-case'
-import { CreateUserZodSchemaValidator } from '@/infra/adapters/validation/schemas/create-user-zod-schema-validator'
+import { CreateUserZodSchemaValidator } from '@/infra/adapters/validation/schemas/zod/create-user-zod-schema-validator'
 import { CreateUserController } from '@/presentation/controllers/create-user/create-user-controller'
 
 export function makeCreateUserController(): CreateUserController {

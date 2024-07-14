@@ -1,8 +1,8 @@
 import { z } from 'zod'
 
-import type { SchemaValidator } from './ports'
+import type { SchemaValidator } from '@/infra/adapters/validation/schemas/ports'
 import type { CreateUserRequest } from '@/application/usecases/app/create-user/ports'
-import { SchemaParser } from '../helpers/schema-parser'
+import { SchemaParser } from '@/infra/adapters/validation/helpers/schema-parser'
 
 type CreateUserHttpRequest = {
   body: CreateUserRequest

@@ -1,9 +1,10 @@
 import type { UseCase } from '@/core/use-case'
 import type { SchemaValidator } from '@/infra/adapters/validation/schemas/ports'
+import type { AuthenticateUserResponse } from '@/application/usecases/auth/authenticate-user/ports'
+import { SchemaValidatorStub } from '@/infra/adapters/validation/schemas/stub/schema-validator-stub'
 import { notFound, badRequest, ok } from '@/presentation/helpers/http-helpers'
 import { InexistentRegisteredUserWithEmailError } from '@/application/errors'
 import { InvalidPasswordError } from '@/application/usecases/auth/authenticate-user/errors'
-import type { AuthenticateUserResponse } from '@/application/usecases/auth/authenticate-user/ports'
 import { AuthenticateUserController } from './authenticate-user-controller'
 
 type Sut = {
@@ -27,18 +28,9 @@ function makeAuthenticateUserUseCaseSub(): UseCase {
   return new AuthenticateUserUseCaseStub()
 }
 
-function makeSchemaValidatorStub(): SchemaValidator {
-  class AuthenticateUserSchemaValidatorStub implements SchemaValidator {
-    validate() {
-      return {}
-    }
-  }
-  return new AuthenticateUserSchemaValidatorStub()
-}
-
 function makeSut(): Sut {
   const authenticateUserUseCase = makeAuthenticateUserUseCaseSub()
-  const authenticateUserSchemaValidator = makeSchemaValidatorStub()
+  const authenticateUserSchemaValidator = new SchemaValidatorStub()
   const sut = new AuthenticateUserController(
     authenticateUserUseCase,
     authenticateUserSchemaValidator,

@@ -1,7 +1,7 @@
 import type { UseCase } from '@/core/use-case'
-import type { CreateUserRequest } from '@/application/usecases/app/create-user/ports'
-import { EmailAlreadyBeingUsedError } from '@/application/usecases/app/create-user/errors'
 import type { SchemaValidator } from '@/infra/adapters/validation/schemas/ports'
+import { SchemaValidatorStub } from '@/infra/adapters/validation/schemas/stub/schema-validator-stub'
+import { EmailAlreadyBeingUsedError } from '@/application/usecases/app/create-user/errors'
 import { HashingPasswordError } from '@/infra/adapters/password-encryptor/errors'
 import {
   badRequest,
@@ -25,22 +25,9 @@ function makeCreateUserSub(): UseCase {
   return new CreateUserStub()
 }
 
-function makeCreateUserSchemaValidatorStub(): SchemaValidator {
-  class CreateUserSchemaValidatorStub implements SchemaValidator {
-    validate(): CreateUserRequest {
-      return {
-        name: 'any_name',
-        email: 'any_email',
-        password: 'any_password',
-      }
-    }
-  }
-  return new CreateUserSchemaValidatorStub()
-}
-
 function makeSut(): Sut {
   const createUserUseCase = makeCreateUserSub()
-  const createUserSchemaValidator = makeCreateUserSchemaValidatorStub()
+  const createUserSchemaValidator = new SchemaValidatorStub()
   const sut = new CreateUserController(
     createUserUseCase,
     createUserSchemaValidator,

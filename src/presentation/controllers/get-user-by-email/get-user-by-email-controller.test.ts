@@ -1,7 +1,8 @@
 import type { UseCase } from '@/core/use-case'
-import type { GetUserByEmailResponse } from '@/application/usecases/app/get-user-by-email/ports'
-import { InexistentRegisteredUserWithEmailError } from '@/application/errors'
 import type { SchemaValidator } from '@/infra/adapters/validation/schemas/ports'
+import type { GetUserByEmailResponse } from '@/application/usecases/app/get-user-by-email/ports'
+import { SchemaValidatorStub } from '@/infra/adapters/validation/schemas/stub/schema-validator-stub'
+import { InexistentRegisteredUserWithEmailError } from '@/application/errors'
 import { notFound, ok } from '@/presentation/helpers/http-helpers'
 import { GetUserByEmailController } from './get-user-by-email-controller'
 
@@ -26,20 +27,9 @@ function makeGetUserByEmailSub(): UseCase {
   return new GetUserByEmailStub()
 }
 
-function makeGetUserByEmailSchemaValidatorStub(): SchemaValidator {
-  class GetUserByEmailSchemaValidatorStub implements SchemaValidator {
-    validate() {
-      return {
-        email: 'any_email',
-      }
-    }
-  }
-  return new GetUserByEmailSchemaValidatorStub()
-}
-
 function makeSut(): Sut {
   const getUserByEmailUseCase = makeGetUserByEmailSub()
-  const getUserByEmailSchemaValidator = makeGetUserByEmailSchemaValidatorStub()
+  const getUserByEmailSchemaValidator = new SchemaValidatorStub()
   const sut = new GetUserByEmailController(
     getUserByEmailUseCase,
     getUserByEmailSchemaValidator,
