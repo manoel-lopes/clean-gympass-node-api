@@ -1,5 +1,3 @@
-import type { User } from '@/domain/models/user'
+import type { UserOutputData } from '@/domain/models/user'
 
-export type GetUserByEmailResponse = Omit<User, 'password' | 'createdAt'> & {
-  createdAt: string
-}
+export type GetUserByEmailResponse = UserOutputData
