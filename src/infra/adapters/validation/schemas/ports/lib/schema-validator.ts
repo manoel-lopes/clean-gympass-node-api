@@ -1,3 +1,5 @@
+type Schema = Record<string, unknown>
+
 export type SchemaValidator = {
-  validate: (data: unknown) => Record<string, unknown>
+  validate: (data: unknown) => Schema
 }
