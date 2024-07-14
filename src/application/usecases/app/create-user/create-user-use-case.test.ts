@@ -60,4 +60,18 @@ describe('CreateUserUseCase', () => {
       new HashingPasswordError('any_error'),
     )
   })
+
+  it('should correctly create a new user', async () => {
+    const { sut, getUserByEmailUseCase, passwordEncryptorStub } = makeSut()
+    const passwordEncryptorSpy = vi.spyOn(passwordEncryptorStub, 'hashPassword')
+
+    await sut.execute(request)
+    const user = await getUserByEmailUseCase.execute({ email: 'any_email' })
+
+    expect(passwordEncryptorSpy).toHaveBeenCalledWith('any_password')
+    expect(user.id).toEqual(expect.any(String))
+    expect(user.name).toBe('any_name')
+    expect(user.email).toBe('any_email')
+    expect(new Date(user.createdAt).getTime()).not.toBeNaN()
+  })
 })
