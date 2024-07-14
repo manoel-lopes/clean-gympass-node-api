@@ -9,7 +9,7 @@ type CreateUserHttpRequest = {
 }
 
 export class CreateUserZodSchemaValidator implements SchemaValidator {
-  validate(data: unknown): CreateUserRequest {
+  validate(data: unknown) {
     const schema = z.object({
       body: z.object({
         name: z.string().min(3),
