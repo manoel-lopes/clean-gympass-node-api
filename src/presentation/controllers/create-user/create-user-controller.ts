@@ -1,4 +1,5 @@
-import type { CreateUserSchemaValidator } from '@/application/validation/schema/create-user-schema-validator'
+import type { UseCase } from '@/core/use-case'
+import type { SchemaValidator } from '@/infra/adapters/validation/schemas/ports'
 import type { HttpRequest, HttpResponse } from '@/infra/adapters/http/ports'
 import {
   created,
@@ -7,12 +8,11 @@ import {
 } from '@/presentation/helpers/http-helpers'
 import { EmailAlreadyBeingUsedError } from '@/application/usecases/app/create-user/errors'
 import { HashingPasswordError } from '@/infra/adapters/password-encryptor/errors'
-import type { UseCase } from '@/core/use-case'
 
 export class CreateUserController {
   constructor(
     private readonly createUserUseCase: UseCase,
-    private readonly createUserSchemaValidator: CreateUserSchemaValidator,
+    private readonly createUserSchemaValidator: SchemaValidator,
   ) {
     Object.freeze(this)
   }

@@ -1,6 +1,6 @@
 import { z } from 'zod'
 
-import type { GetUserByEmailSchemaValidator } from '@/application/validation/schema/get-user-by-email-schema-validator'
+import type { SchemaValidator } from './ports'
 import type { GetUserByEmailRequest } from '@/application/usecases/app/get-user-by-email/ports'
 import { SchemaParser } from '../helpers/schema-parser'
 
@@ -8,9 +8,7 @@ type GetUserByEmailHttpRequest = {
   params: GetUserByEmailRequest
 }
 
-export class GetUserByEmailZodSchemaValidator
-  implements GetUserByEmailSchemaValidator
-{
+export class GetUserByEmailZodSchemaValidator implements SchemaValidator {
   validate(data: unknown) {
     const schema = z.object({
       params: z.object({
