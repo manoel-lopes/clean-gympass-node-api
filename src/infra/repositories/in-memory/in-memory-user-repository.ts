@@ -8,7 +8,7 @@ export class InMemoryUserRepository implements UserRepository {
 
   async save(userData: User): Promise<void> {
     this.users.push({
-      id: userData.id || crypto.randomUUID(),
+      id: crypto.randomUUID(),
       createdAt: new Date(),
       ...userData,
     })
