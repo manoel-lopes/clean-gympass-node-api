@@ -1,4 +1,4 @@
-# A API for gympass services that provides access to gyms, studios, and wellness facilities cloase to the user. It caters to individuals looking for diverse fitness options and companies aiming to offer wellness benefits to their employees.
+# A API for gympass services that provides access to gyms, studios, and wellness facilities close to the user. It caters to individuals looking for diverse fitness options and companies aiming to offer wellness benefits to their employees.
 
 ##  Business Rules
 
@@ -7,6 +7,7 @@
 - [x] The user cannot check in if they are not near (100m) the gym;
 - [x] The check-in can only be validated up to 20 minutes after it is created;
 - [x] The check-in can only be validated by administrators;
+- [x] The user profile can only be consulted using the user email by administrators;
 - [x] The gym can only be registered by administrators;
 
 ## Functional Requirements
