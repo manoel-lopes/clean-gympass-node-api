@@ -14,4 +14,11 @@ export class PrismaUserRepository implements UserRepository {
     const { created_at, ...rest } = user
     return { ...rest, createdAt: created_at }
   }
+
+  async findById(id: string): Promise<Required<User> | null> {
+    const user = await prisma.user.findUnique({ where: { id } })
+    if (!user) return null
+    const { created_at, ...rest } = user
+    return { ...rest, createdAt: created_at }
+  }
 }

@@ -1,7 +1,7 @@
 import type { UseCase } from '@/core/use-case'
 import type { UserRepository } from '@/application/repositories/user-repository'
 import type { PasswordEncryptor } from '@/infra/adapters/password-encryptor/ports/lib/password-encryptor'
-import { InexistentRegisteredUserWithEmailError } from '@/application/errors'
+import { InexistentRegisteredUser } from '@/application/errors'
 import type { AuthenticateUserRequest, AuthenticateUserResponse } from './ports'
 import { InvalidPasswordError } from './errors'
 
@@ -19,7 +19,7 @@ export class AuthenticateUserUseCase implements UseCase {
     const { email, password } = req
     const user = await this.userRepository.findByEmail(email)
     if (!user) {
-      throw new InexistentRegisteredUserWithEmailError(email)
+      throw new InexistentRegisteredUser('email')
     }
 
     const doesPasswordMatch = await this.passwordEncryptor.verifyPassword(

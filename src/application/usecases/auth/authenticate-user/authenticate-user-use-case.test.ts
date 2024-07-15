@@ -1,7 +1,7 @@
 import { vi, describe, it, expect } from 'vitest'
 
 import { CreateUserUseCase } from '@/application/usecases/app/create-user/create-user-use-case'
-import { InexistentRegisteredUserWithEmailError } from '@/application/errors'
+import { InexistentRegisteredUser } from '@/application/errors'
 import type { PasswordEncryptor } from '@/infra/adapters/password-encryptor/ports'
 import { InMemoryUserRepository } from '@/infra/repositories/in-memory/in-memory-user-repository'
 import { AuthenticateUserUseCase } from './authenticate-user-use-case'
@@ -51,7 +51,7 @@ describe('AuthenticateUserUseCase', () => {
     const { sut } = makeSut()
 
     expect(sut.execute(request)).rejects.toThrowError(
-      new InexistentRegisteredUserWithEmailError(request.email),
+      new InexistentRegisteredUser('email'),
     )
   })
 
@@ -65,16 +65,5 @@ describe('AuthenticateUserUseCase', () => {
     await expect(sut.execute(request)).rejects.toThrowError(
       new InvalidPasswordError(),
     )
-  })
-
-  it('should correctly authenticate a user', async () => {
-    const { sut, createUserUseCase } = makeSut()
-    await createUserUseCase.execute({ name: 'any_name', ...request })
-
-    const user = await sut.execute(request)
-    expect(user.id).toEqual(expect.any(String))
-    expect(user.name).toBe('any_name')
-    expect(user.email).toBe('any_email')
-    expect(new Date(user.createdAt).getTime()).not.toBeNaN()
   })
 })

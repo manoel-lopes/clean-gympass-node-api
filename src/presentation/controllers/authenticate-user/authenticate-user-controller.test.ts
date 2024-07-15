@@ -3,7 +3,7 @@ import type { SchemaValidator } from '@/infra/adapters/validation/schemas/ports'
 import type { AuthenticateUserResponse } from '@/application/usecases/auth/authenticate-user/ports'
 import { SchemaValidatorStub } from '@/infra/adapters/validation/schemas/stub/schema-validator-stub'
 import { notFound, badRequest, ok } from '@/presentation/helpers/http-helpers'
-import { InexistentRegisteredUserWithEmailError } from '@/application/errors'
+import { InexistentRegisteredUser } from '@/application/errors'
 import { InvalidPasswordError } from '@/application/usecases/auth/authenticate-user/errors'
 import { AuthenticateUserController } from './authenticate-user-controller'
 
@@ -49,14 +49,14 @@ describe('AuthenticateUserController', () => {
   it('should return 404 if there is not a user with the given email', async () => {
     const { sut, authenticateUserUseCase } = makeSut()
     vi.spyOn(authenticateUserUseCase, 'execute').mockRejectedValue(
-      new InexistentRegisteredUserWithEmailError('any_wrong_email'),
+      new InexistentRegisteredUser('email'),
     )
 
     const httpResponse = await sut.handle(httpRequest)
 
     expect(httpResponse.statusCode).toBe(404)
     expect(httpResponse).toEqual(
-      notFound(new InexistentRegisteredUserWithEmailError('any_wrong_email')),
+      notFound(new InexistentRegisteredUser('email')),
     )
   })
 

@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest'
 
 import { InMemoryUserRepository } from '@/infra/repositories/in-memory/in-memory-user-repository'
-import { InexistentRegisteredUserWithEmailError } from '@/application/errors'
+import { InexistentRegisteredUser } from '@/application/errors'
 import { GetUserByEmailUseCase } from './get-user-by-email-use-case'
 
 type Sut = {
@@ -20,7 +20,7 @@ describe('GetUserByEmailUseCase', () => {
     const { sut } = makeSut()
 
     expect(sut.execute({ email })).rejects.toThrowError(
-      new InexistentRegisteredUserWithEmailError(email),
+      new InexistentRegisteredUser('email'),
     )
   })
 })

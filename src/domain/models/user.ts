@@ -6,6 +6,6 @@ export type User = {
   createdAt?: Date
 }
 
-export type UserOutputData = Omit<User, 'password' | 'createdAt'> & {
+export type UserOutputData = Omit<Required<User>, 'password' | 'createdAt'> & {
   createdAt: string
 }
