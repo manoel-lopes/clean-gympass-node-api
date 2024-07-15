@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest'
 
 import { InMemoryUserRepository } from '@/infra/repositories/in-memory/in-memory-user-repository'
-import type { PasswordEncryptor } from '@/infra/adapters/password-encryptor/ports'
+import { PasswordEncryptorStub } from '@/infra/adapters/password-encryptor/stub/password-encryptor-stub'
 import { InexistentRegisteredUser } from '@/application/errors'
 import { AuthenticateUserUseCase } from '@/application/usecases/auth/authenticate-user/authenticate-user-use-case'
 import { CreateUserUseCase } from '../create-user/create-user-use-case'
@@ -13,22 +13,9 @@ type Sut = {
   authenticate: AuthenticateUserUseCase
 }
 
-function makePasswordEncryptorStub(): PasswordEncryptor {
-  class PasswordEncryptorStub implements PasswordEncryptor {
-    async hashPassword(): Promise<string> {
-      return 'hashed_password'
-    }
-
-    async verifyPassword(): Promise<boolean> {
-      return true
-    }
-  }
-  return new PasswordEncryptorStub()
-}
-
 function makeSut(): Sut {
   const userRepository = new InMemoryUserRepository()
-  const passwordEncryptor = makePasswordEncryptorStub()
+  const passwordEncryptor = new PasswordEncryptorStub()
   const sut = new GetUserByIdUseCase(userRepository)
   const createUserUseCase = new CreateUserUseCase(
     userRepository,

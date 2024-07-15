@@ -4,21 +4,9 @@ import { CreateUserUseCase } from '@/application/usecases/app/create-user/create
 import { InexistentRegisteredUser } from '@/application/errors'
 import type { PasswordEncryptor } from '@/infra/adapters/password-encryptor/ports'
 import { InMemoryUserRepository } from '@/infra/repositories/in-memory/in-memory-user-repository'
+import { PasswordEncryptorStub } from '@/infra/adapters/password-encryptor/stub/password-encryptor-stub'
 import { AuthenticateUserUseCase } from './authenticate-user-use-case'
 import { InvalidPasswordError } from './errors'
-
-function makePasswordEncryptorStub(): PasswordEncryptor {
-  class PasswordEncryptorStub implements PasswordEncryptor {
-    async hashPassword(): Promise<string> {
-      return 'hashed_password'
-    }
-
-    async verifyPassword(): Promise<boolean> {
-      return true
-    }
-  }
-  return new PasswordEncryptorStub()
-}
 
 type Sut = {
   sut: AuthenticateUserUseCase
@@ -27,7 +15,7 @@ type Sut = {
 }
 
 function makeSut(): Sut {
-  const passwordEncryptorStub = makePasswordEncryptorStub()
+  const passwordEncryptorStub = new PasswordEncryptorStub()
   const userRepository = new InMemoryUserRepository()
   const createUserUseCase = new CreateUserUseCase(
     userRepository,

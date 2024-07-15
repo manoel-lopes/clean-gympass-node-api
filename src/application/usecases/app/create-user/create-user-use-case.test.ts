@@ -3,22 +3,10 @@ import { vi, describe, it, expect } from 'vitest'
 import type { PasswordEncryptor } from '@/infra/adapters/password-encryptor/ports'
 import { HashingPasswordError } from '@/infra/adapters/password-encryptor/errors'
 import { InMemoryUserRepository } from '@/infra/repositories/in-memory/in-memory-user-repository'
+import { PasswordEncryptorStub } from '@/infra/adapters/password-encryptor/stub/password-encryptor-stub'
 import { GetUserByEmailUseCase } from '../get-user-by-email/get-user-by-email-use-case'
 import { EmailAlreadyBeingUsedError } from './errors'
 import { CreateUserUseCase } from './create-user-use-case'
-
-function makePasswordEncryptorStub(): PasswordEncryptor {
-  class PasswordEncryptorStub implements PasswordEncryptor {
-    async hashPassword(): Promise<string> {
-      return 'hashed_password'
-    }
-
-    async verifyPassword(): Promise<boolean> {
-      return true
-    }
-  }
-  return new PasswordEncryptorStub()
-}
 
 type Sut = {
   sut: CreateUserUseCase
@@ -27,8 +15,8 @@ type Sut = {
 }
 
 function makeSut(): Sut {
-  const passwordEncryptorStub = makePasswordEncryptorStub()
   const userRepository = new InMemoryUserRepository()
+  const passwordEncryptorStub = new PasswordEncryptorStub()
   const sut = new CreateUserUseCase(userRepository, passwordEncryptorStub)
   const getUserByEmailUseCase = new GetUserByEmailUseCase(userRepository)
   return { sut, passwordEncryptorStub, getUserByEmailUseCase }
