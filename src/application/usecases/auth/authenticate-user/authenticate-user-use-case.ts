@@ -21,6 +21,7 @@ export class AuthenticateUserUseCase implements UseCase {
     if (!user) {
       throw new InexistentRegisteredUserWithEmailError(email)
     }
+
     const doesPasswordMatch = await this.passwordEncryptor.verifyPassword(
       password,
       user.password,
@@ -28,11 +29,12 @@ export class AuthenticateUserUseCase implements UseCase {
     if (!doesPasswordMatch) {
       throw new InvalidPasswordError()
     }
+
     const formattedUser = {
       id: user.id,
       name: user.name,
       email: user.email,
-      createdAt: new Date(user.createdAt).toISOString(),
+      createdAt: user.createdAt.toISOString(),
     }
     return formattedUser
   }

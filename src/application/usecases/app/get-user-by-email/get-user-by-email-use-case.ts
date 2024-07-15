@@ -1,7 +1,7 @@
 import type { UseCase } from '@/core/use-case'
 import type { UserRepository } from '@/application/repositories/user-repository'
-import type { GetUserByEmailRequest, GetUserByEmailResponse } from './ports'
 import { InexistentRegisteredUserWithEmailError } from '@/application/errors'
+import type { GetUserByEmailRequest, GetUserByEmailResponse } from './ports'
 
 export class GetUserByEmailUseCase implements UseCase {
   constructor(private readonly userRepository: UserRepository) {
@@ -15,11 +15,12 @@ export class GetUserByEmailUseCase implements UseCase {
     if (!user) {
       throw new InexistentRegisteredUserWithEmailError(email)
     }
+
     const formattedUser = {
       id: user.id,
       name: user.name,
       email: user.email,
-      createdAt: new Date(user.createdAt).toISOString(),
+      createdAt: user.createdAt.toISOString(),
     }
     return formattedUser
   }
