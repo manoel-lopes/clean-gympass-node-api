@@ -1,7 +1,7 @@
-import type { User } from '@/domain/models/user'
+import type { User, UserInputData } from '@/domain/models/user'
 
 export type UserRepository = {
-  save(userData: User): Promise<void>
-  findByEmail(email: string): Promise<Required<User> | null>
-  findById(id: string): Promise<Required<User> | null>
+  save(userData: UserInputData): Promise<void>
+  findByEmail(email: string): Promise<User | null>
+  findById(id: string): Promise<User | null>
 }

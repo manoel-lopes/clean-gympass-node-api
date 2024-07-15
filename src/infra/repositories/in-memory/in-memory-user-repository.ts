@@ -1,24 +1,24 @@
 import crypto from 'node:crypto'
 
 import type { UserRepository } from '@/application/repositories/user-repository'
-import type { User } from '@/domain/models/user'
+import type { User, UserInputData } from '@/domain/models/user'
 
 export class InMemoryUserRepository implements UserRepository {
-  private users: Required<User>[] = []
+  private users: User[] = []
 
-  async save(userData: User): Promise<void> {
+  async save(userData: UserInputData): Promise<void> {
     this.users.push({
+      ...userData,
       id: crypto.randomUUID(),
       createdAt: new Date(),
-      ...userData,
     })
   }
 
-  async findByEmail(email: string): Promise<Required<User> | null> {
+  async findByEmail(email: string): Promise<User | null> {
     return this.users.find((user) => user.email === email) || null
   }
 
-  async findById(id: string): Promise<Required<User> | null> {
+  async findById(id: string): Promise<User | null> {
     return this.users.find((user) => user.id === id) || null
   }
 }

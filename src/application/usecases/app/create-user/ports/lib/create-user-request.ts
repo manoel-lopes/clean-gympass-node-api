@@ -1,3 +1,3 @@
-import type { User } from '@/domain/models/user'
+import type { UserInputData } from '@/domain/models/user'
 
-export type CreateUserRequest = Omit<User, 'id' | 'createdAt'>
+export type CreateUserRequest = UserInputData
