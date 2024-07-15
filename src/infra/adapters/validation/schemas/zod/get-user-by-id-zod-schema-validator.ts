@@ -5,20 +5,20 @@ import type { GetUserByIdRequest } from '@/application/usecases/app/get-user-by-
 import { SchemaParser } from '@/infra/adapters/validation/helpers/schema-parser'
 
 type GetUserByIdHttpRequest = {
-  query: GetUserByIdRequest
+  params: GetUserByIdRequest
 }
 
 export class GetUserByIdZodSchemaValidator implements SchemaValidator {
   validate(data: unknown) {
     const schema = z.object({
-      query: z.object({
-        userId: z.string().cuid(),
+      params: z.object({
+        userId: z.string().cuid('Invalid user id'),
       }),
     })
     const validatedData = SchemaParser.parse<GetUserByIdHttpRequest>(
       schema,
       data,
     )
-    return validatedData.query
+    return validatedData.params
   }
 }
