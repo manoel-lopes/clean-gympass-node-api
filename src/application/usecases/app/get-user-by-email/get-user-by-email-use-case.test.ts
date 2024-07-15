@@ -1,12 +1,11 @@
 import { describe, it, expect } from 'vitest'
 
-import type { UseCase } from '@/core/use-case'
 import { InMemoryUserRepository } from '@/infra/repositories/in-memory/in-memory-user-repository'
 import { InexistentRegisteredUserWithEmailError } from '@/application/errors'
 import { GetUserByEmailUseCase } from './get-user-by-email-use-case'
 
 type Sut = {
-  sut: UseCase
+  sut: GetUserByEmailUseCase
 }
 
 function makeSut(): Sut {
