@@ -17,20 +17,29 @@ export abstract class SchemaParser {
     path: (string | number)[],
     message: string,
   ): string {
-    const [object, field] = path
+    const [object, property] = path
     const normalizedMessage = message
       .toLowerCase()
       .replace('string must', 'must')
 
-    if (!field) {
+    if (!property) {
       return `Empty request ${object}`
     }
 
     if (normalizedMessage.includes('invalid')) {
       return `${this.capitalizeFirstLetter(normalizedMessage)} on request ${object === 'query' ? 'query params' : object}`
     }
-
-    return `Field '${field}' ${normalizedMessage === 'required' ? 'is ' + normalizedMessage : normalizedMessage}`
+    const objMapper: Record<string, string> = {
+      body: 'Field',
+      params: 'Route',
+      query: 'Query',
+    }
+    const firstWord = `${objMapper[`${object}`]} param`
+    return `${firstWord} '${property}' ${
+      normalizedMessage === 'required'
+        ? 'is ' + normalizedMessage
+        : normalizedMessage
+    }`
   }
 
   private static capitalizeFirstLetter(text: string): string {
