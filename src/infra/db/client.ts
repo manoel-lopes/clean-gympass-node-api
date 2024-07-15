@@ -1,7 +1,8 @@
-import { env } from '@/lib/env'
 import { PrismaClient } from '@prisma/client'
+import { type Env, env } from '@/lib/env'
 
-const log: Record<string, string[]> = {
+type LogLevel = 'query' | 'warn' | 'error'
+const log: Record<Env['NODE_ENV'], LogLevel[]> = {
   development: ['query'],
   production: ['error', 'warn'],
   test: [],
