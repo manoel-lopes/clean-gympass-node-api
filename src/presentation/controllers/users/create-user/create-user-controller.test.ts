@@ -2,7 +2,10 @@ import type { UseCase } from '@/core/use-case'
 import type { SchemaValidator } from '@/infra/adapters/validation/schemas/ports'
 import { SchemaValidatorStub } from '@/infra/adapters/validation/schemas/stub/schema-validator-stub'
 import { EmailAlreadyBeingUsedError } from '@/application/usecases/users/create-user/errors'
-import { HashingPasswordError } from '@/infra/adapters/password-encryptor/errors'
+import {
+  HashingPasswordError,
+  VerifyPasswordError,
+} from '@/infra/adapters/password-encryptor/errors'
 import {
   badRequest,
   conflict,
@@ -69,6 +72,20 @@ describe('CreateUserController', () => {
     expect(httpResponse.statusCode).toBe(400)
     expect(httpResponse).toEqual(
       badRequest(new HashingPasswordError('any_error')),
+    )
+  })
+
+  it('should return 400 if verify password fails', async () => {
+    const { sut, createUserUseCase } = makeSut()
+    vi.spyOn(createUserUseCase, 'execute').mockRejectedValue(
+      new VerifyPasswordError('any_error'),
+    )
+
+    const httpResponse = await sut.handle(httpRequest)
+
+    expect(httpResponse.statusCode).toBe(400)
+    expect(httpResponse).toEqual(
+      badRequest(new VerifyPasswordError('any_error')),
     )
   })
 

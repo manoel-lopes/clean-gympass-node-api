@@ -1,7 +1,10 @@
 import { vi, describe, it, expect } from 'vitest'
 
 import type { PasswordEncryptor } from '@/infra/adapters/password-encryptor/ports'
-import { HashingPasswordError } from '@/infra/adapters/password-encryptor/errors'
+import {
+  HashingPasswordError,
+  VerifyPasswordError,
+} from '@/infra/adapters/password-encryptor/errors'
 import { InMemoryUserRepository } from '@/infra/repositories/in-memory/in-memory-user-repository'
 import { PasswordEncryptorStub } from '@/infra/adapters/password-encryptor/stub/password-encryptor-stub'
 import { GetUserByEmailUseCase } from '../get-user-by-email/get-user-by-email-use-case'
@@ -46,6 +49,17 @@ describe('CreateUserUseCase', () => {
 
     await expect(sut.execute(request)).rejects.toThrowError(
       new HashingPasswordError('any_error'),
+    )
+  })
+
+  it('should throw an error if the password verification fails', async () => {
+    const { sut, passwordEncryptorStub } = makeSut()
+    vi.spyOn(passwordEncryptorStub, 'hashPassword').mockRejectedValue(
+      new VerifyPasswordError('any_error'),
+    )
+
+    await expect(sut.execute(request)).rejects.toThrowError(
+      new VerifyPasswordError('any_error'),
     )
   })
 

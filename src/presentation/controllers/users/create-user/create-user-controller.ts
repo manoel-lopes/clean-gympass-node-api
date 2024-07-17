@@ -7,7 +7,10 @@ import {
   badRequest,
 } from '@/presentation/helpers/http-helpers'
 import { EmailAlreadyBeingUsedError } from '@/application/usecases/users/create-user/errors'
-import { HashingPasswordError } from '@/infra/adapters/password-encryptor/errors'
+import {
+  HashingPasswordError,
+  VerifyPasswordError,
+} from '@/infra/adapters/password-encryptor/errors'
 
 export class CreateUserController {
   constructor(
@@ -28,6 +31,10 @@ export class CreateUserController {
       }
 
       if (error instanceof HashingPasswordError) {
+        return badRequest(error)
+      }
+
+      if (error instanceof VerifyPasswordError) {
         return badRequest(error)
       }
       throw error
