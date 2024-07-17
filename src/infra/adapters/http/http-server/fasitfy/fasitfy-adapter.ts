@@ -1,6 +1,6 @@
 import Fastify from 'fastify'
 import cors from '@fastify/cors'
-import type { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify'
+import type { FastifyInstance, FastifyReply } from 'fastify'
 import type { HttpServer } from '@/infra/adapters/http/http-server/ports'
 import type { RouteHandler } from '@/infra/api/ports'
 import type {
@@ -28,7 +28,7 @@ export class FastifyAdapter implements HttpServer {
     this.app.route({
       method,
       url,
-      handler: async (req: FastifyRequest, reply: FastifyReply) => {
+      handler: async (req, reply) => {
         const res = this.adaptReply(reply)
         try {
           await handler(req, res)
