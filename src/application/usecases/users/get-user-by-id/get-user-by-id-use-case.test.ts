@@ -29,7 +29,7 @@ function makeSut(): Sut {
 }
 
 describe('GetUserByIdUseCase', () => {
-  it('should throw an error if there is not a registered user with the given email', () => {
+  it('should throw an error if there is not a registered user with the given user id', () => {
     const userId = 'any_non_existing_user_id'
     const { sut } = makeSut()
 
