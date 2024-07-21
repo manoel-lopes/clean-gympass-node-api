@@ -20,3 +20,8 @@ export type ApiResponse = {
   send?(data: unknown): unknown
   data?: unknown
 }
+
+export type RouteHandler = (
+  req: ApiRequest,
+  res: ApiResponse,
+) => Promise<unknown>

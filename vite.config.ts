@@ -19,7 +19,6 @@ export default defineConfig({
         'src/main',
         'src/core',
         'src/lib',
-        'src/infra/api',
         'src/infra/db',
         'src/infra/adapters/validation/schemas/zod',
         'src/infra/adapters/password-encryptor/bcrypt',
