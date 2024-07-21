@@ -1,7 +1,6 @@
 import path from 'node:path'
-import { defineConfig, configDefaults } from 'vitest/config'
+import { defineConfig, configDefaults, UserConfig } from 'vitest/config'
 import type { InlineConfig } from 'vitest'
-import type { UserConfig } from 'vite'
 
 export default defineConfig({
   resolve: {
