@@ -3,14 +3,16 @@ import { describe, it, expect } from 'vitest'
 import { InMemoryUserRepository } from '@/infra/repositories/in-memory/in-memory-user-repository'
 import { PasswordEncryptorStub } from '@/infra/adapters/password-encryptor/stub/password-encryptor-stub'
 import { InexistentRegisteredUser } from '@/application/errors'
-import { AuthenticateUserUseCase } from '@/application/usecases/users'
-import { CreateUserUseCase } from '../create-user/create-user-use-case'
+import {
+  CreateUserUseCase,
+  AuthenticateUserUseCase,
+} from '@/application/usecases/users'
 import { GetUserByIdUseCase } from './get-user-by-id-use-case'
 
 type Sut = {
   sut: GetUserByIdUseCase
   createUserUseCase: CreateUserUseCase
-  authenticate: AuthenticateUserUseCase
+  authenticateUserUseCase: AuthenticateUserUseCase
 }
 
 function makeSut(): Sut {
@@ -21,11 +23,11 @@ function makeSut(): Sut {
     userRepository,
     passwordEncryptor,
   )
-  const authenticate = new AuthenticateUserUseCase(
+  const authenticateUserUseCase = new AuthenticateUserUseCase(
     userRepository,
     passwordEncryptor,
   )
-  return { sut, createUserUseCase, authenticate }
+  return { sut, createUserUseCase, authenticateUserUseCase }
 }
 
 describe('GetUserByIdUseCase', () => {
@@ -39,7 +41,7 @@ describe('GetUserByIdUseCase', () => {
   })
 
   it('should correctly return the user data', async () => {
-    const { sut, createUserUseCase, authenticate } = makeSut()
+    const { sut, createUserUseCase, authenticateUserUseCase } = makeSut()
 
     await createUserUseCase.execute({
       name: 'any_name',
@@ -47,7 +49,7 @@ describe('GetUserByIdUseCase', () => {
       password: 'any_password',
     })
 
-    const { id: userId } = await authenticate.execute({
+    const { id: userId } = await authenticateUserUseCase.execute({
       email: 'any_email',
       password: 'any_password',
     })
