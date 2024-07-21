@@ -1,10 +1,11 @@
 import type { UseCase } from '@/core/use-case'
-import type { SchemaValidator } from '@/infra/adapters/validation/schemas/ports'
 import type { AuthenticateUserResponse } from '@/application/usecases/users/authenticate-user/ports'
-import { SchemaValidatorStub } from '@/infra/adapters/validation/schemas/stub/schema-validator-stub'
-import { notFound, badRequest, ok } from '@/presentation/helpers/http-helpers'
-import { InexistentRegisteredUser } from '@/application/errors'
 import { InvalidPasswordError } from '@/application/usecases/users/authenticate-user/errors'
+import { InexistentRegisteredUser } from '@/application/errors'
+import type { SchemaValidator } from '@/infra/adapters/validation/schemas/ports'
+import { SchemaValidatorStub } from '@/infra/adapters/validation/schemas/stub/schema-validator-stub'
+import { SchemaParseFailedError } from '@/infra/adapters/validation/errors'
+import { notFound, badRequest, ok } from '@/presentation/helpers/http-helpers'
 import { AuthenticateUserController } from './authenticate-user-controller'
 
 type Sut = {
@@ -76,11 +77,13 @@ describe('AuthenticateUserController', () => {
     const { sut, authenticateUserSchemaValidator } = makeSut()
     vi.spyOn(authenticateUserSchemaValidator, 'validate').mockImplementation(
       () => {
-        throw new Error('any_error')
+        throw new SchemaParseFailedError('any_error')
       },
     )
 
-    expect(sut.handle(httpRequest)).rejects.toThrow(new Error('any_error'))
+    expect(sut.handle(httpRequest)).rejects.toThrow(
+      new SchemaParseFailedError('any_error'),
+    )
   })
 
   it('should throw the error if is not a known error', async () => {

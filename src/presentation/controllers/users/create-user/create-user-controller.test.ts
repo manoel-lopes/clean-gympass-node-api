@@ -1,16 +1,17 @@
 import type { UseCase } from '@/core/use-case'
-import type { SchemaValidator } from '@/infra/adapters/validation/schemas/ports'
-import { SchemaValidatorStub } from '@/infra/adapters/validation/schemas/stub/schema-validator-stub'
 import { EmailAlreadyBeingUsedError } from '@/application/usecases/users/create-user/errors'
-import {
-  HashingPasswordError,
-  VerifyPasswordError,
-} from '@/infra/adapters/password-encryptor/errors'
 import {
   badRequest,
   conflict,
   created,
 } from '@/presentation/helpers/http-helpers'
+import type { SchemaValidator } from '@/infra/adapters/validation/schemas/ports'
+import { SchemaValidatorStub } from '@/infra/adapters/validation/schemas/stub/schema-validator-stub'
+import {
+  HashingPasswordError,
+  VerifyPasswordError,
+} from '@/infra/adapters/password-encryptor/errors'
+import { SchemaParseFailedError } from '@/infra/adapters/validation/errors'
 import { CreateUserController } from './create-user-controller'
 
 type Sut = {
@@ -92,10 +93,12 @@ describe('CreateUserController', () => {
   it('should throw a schema validation error', async () => {
     const { sut, createUserSchemaValidator } = makeSut()
     vi.spyOn(createUserSchemaValidator, 'validate').mockImplementation(() => {
-      throw new Error('any_error')
+      throw new SchemaParseFailedError('any_error')
     })
 
-    expect(sut.handle(httpRequest)).rejects.toThrow(new Error('any_error'))
+    expect(sut.handle(httpRequest)).rejects.toThrow(
+      new SchemaParseFailedError('any_error'),
+    )
   })
 
   it('should throw the error if is not a known error', async () => {

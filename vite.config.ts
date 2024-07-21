@@ -21,7 +21,6 @@ export default defineConfig({
         'src/infra/db',
         'src/infra/adapters/validation/schemas/zod',
         'src/infra/adapters/password-encryptor/bcrypt',
-        'src/infra/adapters/validation/errors',
         'src/infra/adapters/http/http-server/fasitfy',
         'src/infra/repositories/prisma',
         'src/**/index.ts',

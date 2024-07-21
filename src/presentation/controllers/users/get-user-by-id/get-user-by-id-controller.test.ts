@@ -1,8 +1,9 @@
 import type { UseCase } from '@/core/use-case'
-import type { SchemaValidator } from '@/infra/adapters/validation/schemas/ports'
 import type { GetUserByIdResponse } from '@/application/usecases/users/get-user-by-id/ports'
-import { SchemaValidatorStub } from '@/infra/adapters/validation/schemas/stub/schema-validator-stub'
 import { InexistentRegisteredUser } from '@/application/errors'
+import type { SchemaValidator } from '@/infra/adapters/validation/schemas/ports'
+import { SchemaValidatorStub } from '@/infra/adapters/validation/schemas/stub/schema-validator-stub'
+import { SchemaParseFailedError } from '@/infra/adapters/validation/errors'
 import { notFound, ok } from '@/presentation/helpers/http-helpers'
 import { GetUserByIdController } from './get-user-by-id-controller'
 
@@ -55,10 +56,12 @@ describe('GetUserByIdController', () => {
   it('should throw a schema validation error', async () => {
     const { sut, getUserByIdSchemaValidator } = makeSut()
     vi.spyOn(getUserByIdSchemaValidator, 'validate').mockImplementation(() => {
-      throw new Error('any_error')
+      throw new SchemaParseFailedError('any_error')
     })
 
-    expect(sut.handle(httpRequest)).rejects.toThrow(new Error('any_error'))
+    expect(sut.handle(httpRequest)).rejects.toThrow(
+      new SchemaParseFailedError('any_error'),
+    )
   })
 
   it('should throw the error if is not a known error', async () => {
