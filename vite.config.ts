@@ -1,4 +1,4 @@
-import path from 'node:path'
+import path from 'path'
 import { defineConfig, configDefaults, UserConfig } from 'vitest/config'
 import type { InlineConfig } from 'vitest'
 
@@ -11,22 +11,6 @@ export default defineConfig({
   test: {
     globals: true,
     exclude: [...configDefaults.exclude, 'src/main'],
-    coverage: {
-      include: ['src/'],
-      exclude: [
-        ...configDefaults.exclude,
-        'src/main',
-        'src/core',
-        'src/lib',
-        'src/infra/db',
-        'src/infra/adapters/validation/schemas/zod',
-        'src/infra/adapters/password-encryptor/bcrypt',
-        'src/infra/adapters/http/http-server/fasitfy',
-        'src/infra/repositories/prisma',
-        'src/**/index.ts',
-        'src/**/helpers/*.ts',
-      ],
-    },
   },
 } as UserConfig & {
   test: InlineConfig
