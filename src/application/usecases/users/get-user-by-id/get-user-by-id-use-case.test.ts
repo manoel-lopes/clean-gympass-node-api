@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest'
 
-import { InMemoryUserRepository } from '@/infra/repositories/in-memory/in-memory-user-repository'
+import { InMemoryUsersRepository } from '@/infra/repositories/in-memory/in-memory-users-repository'
 import { PasswordEncryptorStub } from '@/infra/adapters/password-encryptor/stub/password-encryptor-stub'
 import { InexistentRegisteredUser } from '@/application/errors'
 import {
@@ -16,15 +16,15 @@ type Sut = {
 }
 
 function makeSut(): Sut {
-  const userRepository = new InMemoryUserRepository()
+  const UsersRepository = new InMemoryUsersRepository()
   const passwordEncryptor = new PasswordEncryptorStub()
-  const sut = new GetUserByIdUseCase(userRepository)
+  const sut = new GetUserByIdUseCase(UsersRepository)
   const createUserUseCase = new CreateUserUseCase(
-    userRepository,
+    UsersRepository,
     passwordEncryptor,
   )
   const authenticateUserUseCase = new AuthenticateUserUseCase(
-    userRepository,
+    UsersRepository,
     passwordEncryptor,
   )
   return { sut, createUserUseCase, authenticateUserUseCase }

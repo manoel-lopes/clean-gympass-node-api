@@ -1,11 +1,11 @@
-import { PrismaUserRepository } from '@/infra/repositories/prisma/prisma-user-repository'
+import { PrismaUsersRepository } from '@/infra/repositories/prisma/prisma-users-repository'
 import { GetUserByIdUseCase } from '@/application/usecases/users'
 import { GetUserByIdZodSchemaValidator } from '@/infra/adapters/validation/schemas/zod/users'
 import { GetUserByIdController } from '@/presentation/controllers/users'
 
 export function makeGetUserByIdController(): GetUserByIdController {
-  const userRepository = new PrismaUserRepository()
-  const getUserById = new GetUserByIdUseCase(userRepository)
+  const UsersRepository = new PrismaUsersRepository()
+  const getUserById = new GetUserByIdUseCase(UsersRepository)
   const getUserByIdSchemaValidator = new GetUserByIdZodSchemaValidator()
   const getUserByIdController = new GetUserByIdController(
     getUserById,

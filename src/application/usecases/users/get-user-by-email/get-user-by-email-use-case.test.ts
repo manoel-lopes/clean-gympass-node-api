@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest'
 
-import { InMemoryUserRepository } from '@/infra/repositories/in-memory/in-memory-user-repository'
+import { InMemoryUsersRepository } from '@/infra/repositories/in-memory/in-memory-users-repository'
 import { InexistentRegisteredUser } from '@/application/errors'
 import { GetUserByEmailUseCase } from './get-user-by-email-use-case'
 
@@ -9,8 +9,8 @@ type Sut = {
 }
 
 function makeSut(): Sut {
-  const userRepository = new InMemoryUserRepository()
-  const sut = new GetUserByEmailUseCase(userRepository)
+  const UsersRepository = new InMemoryUsersRepository()
+  const sut = new GetUserByEmailUseCase(UsersRepository)
   return { sut }
 }
 

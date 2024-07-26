@@ -1,5 +1,5 @@
 import type { UseCase } from '@/core/use-case'
-import type { UserRepository } from '@/application/repositories/user-repository'
+import type { UsersRepository } from '@/application/repositories/users-repository'
 import type { PasswordEncryptor } from '@/infra/adapters/password-encryptor/ports/lib/password-encryptor'
 import { InexistentRegisteredUser } from '@/application/errors'
 import type { AuthenticateUserRequest, AuthenticateUserResponse } from './ports'
@@ -7,7 +7,7 @@ import { InvalidPasswordError } from './errors'
 
 export class AuthenticateUserUseCase implements UseCase {
   constructor(
-    private readonly userRepository: UserRepository,
+    private readonly UsersRepository: UsersRepository,
     private readonly passwordEncryptor: PasswordEncryptor,
   ) {
     Object.freeze(this)
@@ -17,7 +17,7 @@ export class AuthenticateUserUseCase implements UseCase {
     req: AuthenticateUserRequest,
   ): Promise<AuthenticateUserResponse> {
     const { email, password } = req
-    const user = await this.userRepository.findByEmail(email)
+    const user = await this.UsersRepository.findByEmail(email)
     if (!user) {
       throw new InexistentRegisteredUser('email')
     }

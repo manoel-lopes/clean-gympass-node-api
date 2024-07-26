@@ -1,8 +1,8 @@
-import type { UserRepository } from '@/application/repositories/user-repository'
+import type { UsersRepository } from '@/application/repositories/users-repository'
 import type { User, UserInputData } from '@/domain/models/user'
 import { prisma } from '@/infra/db/client'
 
-export class PrismaUserRepository implements UserRepository {
+export class PrismaUsersRepository implements UsersRepository {
   async save(userData: UserInputData): Promise<void> {
     const { name, email, password } = userData
     await prisma.user.create({ data: { name, email, password } })

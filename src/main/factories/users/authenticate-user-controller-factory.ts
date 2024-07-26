@@ -1,14 +1,14 @@
-import { PrismaUserRepository } from '@/infra/repositories/prisma/prisma-user-repository'
+import { PrismaUsersRepository } from '@/infra/repositories/prisma/prisma-users-repository'
 import { BcryptPasswordEncryptor } from '@/infra/adapters/password-encryptor/bcrypt/bcrypt-password-encryptor'
 import { AuthenticateUserUseCase } from '@/application/usecases/users'
 import { AuthenticateUserZodSchemaValidator } from '@/infra/adapters/validation/schemas/zod/users'
 import { AuthenticateUserController } from '@/presentation/controllers/users'
 
 export function makeAuthenticateUserController(): AuthenticateUserController {
-  const userRepository = new PrismaUserRepository()
+  const UsersRepository = new PrismaUsersRepository()
   const passwordEncryptor = new BcryptPasswordEncryptor()
   const authenticateUserUseCase = new AuthenticateUserUseCase(
-    userRepository,
+    UsersRepository,
     passwordEncryptor,
   )
   const authenticateUserZodSchemaValidator =

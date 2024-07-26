@@ -1,9 +1,9 @@
 import crypto from 'node:crypto'
 
-import type { UserRepository } from '@/application/repositories/user-repository'
+import type { UsersRepository } from '@/application/repositories/users-repository'
 import type { User, UserInputData } from '@/domain/models/user'
 
-export class InMemoryUserRepository implements UserRepository {
+export class InMemoryUsersRepository implements UsersRepository {
   private users: User[] = []
 
   async save(userData: UserInputData): Promise<void> {

@@ -5,7 +5,7 @@ import {
   HashingPasswordError,
   VerifyPasswordError,
 } from '@/infra/adapters/password-encryptor/errors'
-import { InMemoryUserRepository } from '@/infra/repositories/in-memory/in-memory-user-repository'
+import { InMemoryUsersRepository } from '@/infra/repositories/in-memory/in-memory-users-repository'
 import { PasswordEncryptorStub } from '@/infra/adapters/password-encryptor/stub/password-encryptor-stub'
 import { GetUserByEmailUseCase } from '../get-user-by-email/get-user-by-email-use-case'
 import { EmailAlreadyBeingUsedError } from './errors'
@@ -18,10 +18,10 @@ type Sut = {
 }
 
 function makeSut(): Sut {
-  const userRepository = new InMemoryUserRepository()
+  const UsersRepository = new InMemoryUsersRepository()
   const passwordEncryptorStub = new PasswordEncryptorStub()
-  const sut = new CreateUserUseCase(userRepository, passwordEncryptorStub)
-  const getUserByEmailUseCase = new GetUserByEmailUseCase(userRepository)
+  const sut = new CreateUserUseCase(UsersRepository, passwordEncryptorStub)
+  const getUserByEmailUseCase = new GetUserByEmailUseCase(UsersRepository)
   return { sut, passwordEncryptorStub, getUserByEmailUseCase }
 }
 

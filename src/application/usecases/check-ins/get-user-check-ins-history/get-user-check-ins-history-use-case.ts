@@ -1,13 +1,13 @@
 import type { UseCase } from '@/core/use-case'
 import type { CheckIn } from '@/domain/models/check-in'
-import type { UserRepository } from '@/application/repositories/user-repository'
+import type { UsersRepository } from '@/application/repositories/users-repository'
 import type { CheckInRepository } from '@/application/repositories/check-in-repository'
 import { InexistentRegisteredUser } from '@/application/errors'
 import type { GetUserCheckInsHistoryRequest } from './ports'
 
 export class GetUserCheckInsHistoryUseCase implements UseCase {
   constructor(
-    private readonly userRepository: UserRepository,
+    private readonly UsersRepository: UsersRepository,
     private readonly checkInRepository: CheckInRepository,
   ) {
     Object.freeze(this)
@@ -15,7 +15,7 @@ export class GetUserCheckInsHistoryUseCase implements UseCase {
 
   async execute(req: GetUserCheckInsHistoryRequest): Promise<CheckIn[]> {
     const { userId } = req
-    const user = await this.userRepository.findById(userId)
+    const user = await this.UsersRepository.findById(userId)
     if (!user) {
       throw new InexistentRegisteredUser('id')
     }

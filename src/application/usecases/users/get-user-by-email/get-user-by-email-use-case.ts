@@ -1,17 +1,17 @@
 import type { UseCase } from '@/core/use-case'
-import type { UserRepository } from '@/application/repositories/user-repository'
+import type { UsersRepository } from '@/application/repositories/users-repository'
 import { InexistentRegisteredUser } from '@/application/errors'
 import type { GetUserByEmailRequest, GetUserByEmailResponse } from './ports'
 
 export class GetUserByEmailUseCase implements UseCase {
-  constructor(private readonly userRepository: UserRepository) {
+  constructor(private readonly UsersRepository: UsersRepository) {
     Object.freeze(this)
   }
 
   async execute({
     email,
   }: GetUserByEmailRequest): Promise<GetUserByEmailResponse> {
-    const user = await this.userRepository.findByEmail(email)
+    const user = await this.UsersRepository.findByEmail(email)
     if (!user) {
       throw new InexistentRegisteredUser('email')
     }
