@@ -1,9 +1,9 @@
 import { randomUUID } from 'node:crypto'
 
-import type { CheckInRepository } from '@/application/repositories/check-in-repository'
+import type { CheckInsRepository } from '@/application/repositories/check-ins-repository'
 import type { CheckIn, CheckInInputData } from '@/domain/models/check-in'
 
-export class InMemoryCheckInRepository implements CheckInRepository {
+export class InMemoryCheckInsRepository implements CheckInsRepository {
   private readonly checkIns: CheckIn[] = []
   async save(checkInData: CheckInInputData): Promise<void> {
     this.checkIns.push({

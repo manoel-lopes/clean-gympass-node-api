@@ -1,14 +1,14 @@
 import type { UseCase } from '@/core/use-case'
 import type { CheckIn } from '@/domain/models/check-in'
 import type { UsersRepository } from '@/application/repositories/users-repository'
-import type { CheckInRepository } from '@/application/repositories/check-in-repository'
+import type { CheckInsRepository } from '@/application/repositories/check-ins-repository'
 import { InexistentRegisteredUser } from '@/application/errors'
 import type { GetUserCheckInsHistoryRequest } from './ports'
 
 export class GetUserCheckInsHistoryUseCase implements UseCase {
   constructor(
     private readonly UsersRepository: UsersRepository,
-    private readonly checkInRepository: CheckInRepository,
+    private readonly CheckInsRepository: CheckInsRepository,
   ) {
     Object.freeze(this)
   }
@@ -19,7 +19,7 @@ export class GetUserCheckInsHistoryUseCase implements UseCase {
     if (!user) {
       throw new InexistentRegisteredUser('id')
     }
-    const checkIns = await this.checkInRepository.findManyByUserId(userId)
+    const checkIns = await this.CheckInsRepository.findManyByUserId(userId)
     return checkIns
   }
 }

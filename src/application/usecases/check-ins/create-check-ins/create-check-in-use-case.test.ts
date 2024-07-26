@@ -1,5 +1,5 @@
 import { InMemoryUsersRepository } from '@/infra/repositories/in-memory/in-memory-users-repository'
-import { InMemoryCheckInRepository } from '@/infra/repositories/in-memory/in-memory-check-in-repository'
+import { InMemoryCheckInsRepository } from '@/infra/repositories/in-memory/in-memory-check-ins-repository'
 import { PasswordEncryptorStub } from '@/infra/adapters/password-encryptor/stub/password-encryptor-stub'
 import { InexistentRegisteredUser } from '@/application/errors'
 import {
@@ -18,9 +18,9 @@ type Sut = {
 
 function makeSut(): Sut {
   const UsersRepository = new InMemoryUsersRepository()
-  const checkInRepository = new InMemoryCheckInRepository()
+  const CheckInsRepository = new InMemoryCheckInsRepository()
   const passwordEncryptor = new PasswordEncryptorStub()
-  const sut = new CreateCheckInUseCase(UsersRepository, checkInRepository)
+  const sut = new CreateCheckInUseCase(UsersRepository, CheckInsRepository)
   const createUserUseCase = new CreateUserUseCase(
     UsersRepository,
     passwordEncryptor,
@@ -31,7 +31,7 @@ function makeSut(): Sut {
   )
   const getUserCheckInsHistoryUseCase = new GetUserCheckInsHistoryUseCase(
     UsersRepository,
-    checkInRepository,
+    CheckInsRepository,
   )
   return {
     sut,
