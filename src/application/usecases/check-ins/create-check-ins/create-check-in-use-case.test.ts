@@ -6,10 +6,12 @@ import {
   CreateUserUseCase,
   AuthenticateUserUseCase,
 } from '@/application/usecases/users'
+import { GetUserCheckInsHistoryUseCase } from '@/application/usecases/check-ins'
 import { CreateCheckInUseCase } from './create-check-in-use-case'
 
 type Sut = {
   sut: CreateCheckInUseCase
+  getUserCheckInsHistoryUseCase: GetUserCheckInsHistoryUseCase
   createUserUseCase: CreateUserUseCase
   authenticateUserUseCase: AuthenticateUserUseCase
 }
@@ -27,23 +29,40 @@ function makeSut(): Sut {
     userRepository,
     passwordEncryptor,
   )
-  return { sut, createUserUseCase, authenticateUserUseCase }
+  const getUserCheckInsHistoryUseCase = new GetUserCheckInsHistoryUseCase(
+    userRepository,
+    checkInRepository,
+  )
+  return {
+    sut,
+    getUserCheckInsHistoryUseCase,
+    createUserUseCase,
+    authenticateUserUseCase,
+  }
 }
 
 describe('CreateCheckInUseCase', () => {
   it('should throw an error if there is not a registered user with the given user id', () => {
+    // Arrange
     const userId = 'any_non_existing_user_id'
     const gymId = 'any_non_existing_gym_id'
     const { sut } = makeSut()
 
+    // Act and Assert
     expect(sut.execute({ userId, gymId })).rejects.toThrowError(
       new InexistentRegisteredUser('id'),
     )
   })
 
   it('should correctly create a new check in', async () => {
+    // Arrange
     const gymId = 'any_gym_id'
-    const { sut, createUserUseCase, authenticateUserUseCase } = makeSut()
+    const {
+      sut,
+      getUserCheckInsHistoryUseCase,
+      createUserUseCase,
+      authenticateUserUseCase,
+    } = makeSut()
 
     await createUserUseCase.execute({
       name: 'any_name',
@@ -56,6 +75,23 @@ describe('CreateCheckInUseCase', () => {
       password: 'any_password',
     })
 
+    const initialCheckInsHistory = await getUserCheckInsHistoryUseCase.execute({
+      userId,
+    })
+
+    // Act
     await sut.execute({ userId, gymId })
+
+    // Assert
+    const checkInsHistory = await getUserCheckInsHistoryUseCase.execute({
+      userId,
+    })
+    expect(initialCheckInsHistory.length).toBe(0)
+    expect(checkInsHistory.length).toBe(1)
+    const firstCheckIn = checkInsHistory[0]
+    expect(firstCheckIn.id).toEqual(expect.any(String))
+    expect(firstCheckIn.userId).toBe(userId)
+    expect(firstCheckIn.gymId).toEqual(expect.any(String))
+    expect(new Date(firstCheckIn.createdAt).getTime()).not.toBeNaN()
   })
 })
