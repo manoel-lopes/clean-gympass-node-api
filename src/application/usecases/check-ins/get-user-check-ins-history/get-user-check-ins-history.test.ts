@@ -8,11 +8,11 @@ type Sut = {
 }
 
 function makeSut(): Sut {
-  const UsersRepository = new InMemoryUsersRepository()
-  const CheckInsRepository = new InMemoryCheckInsRepository()
+  const usersRepository = new InMemoryUsersRepository()
+  const checkInsRepository = new InMemoryCheckInsRepository()
   const sut = new GetUserCheckInsHistoryUseCase(
-    UsersRepository,
-    CheckInsRepository,
+    usersRepository,
+    checkInsRepository,
   )
   return { sut }
 }

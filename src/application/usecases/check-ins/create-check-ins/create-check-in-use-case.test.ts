@@ -7,6 +7,7 @@ import {
   AuthenticateUserUseCase,
 } from '@/application/usecases/users'
 import { GetUserCheckInsHistoryUseCase } from '@/application/usecases/check-ins'
+import { UserHasAlreadyCheckedInOnTheseDateError } from './errors'
 import { CreateCheckInUseCase } from './create-check-in-use-case'
 
 type Sut = {
@@ -17,21 +18,21 @@ type Sut = {
 }
 
 function makeSut(): Sut {
-  const UsersRepository = new InMemoryUsersRepository()
-  const CheckInsRepository = new InMemoryCheckInsRepository()
+  const usersRepository = new InMemoryUsersRepository()
+  const checkInsRepository = new InMemoryCheckInsRepository()
   const passwordEncryptor = new PasswordEncryptorStub()
-  const sut = new CreateCheckInUseCase(UsersRepository, CheckInsRepository)
+  const sut = new CreateCheckInUseCase(usersRepository, checkInsRepository)
   const createUserUseCase = new CreateUserUseCase(
-    UsersRepository,
+    usersRepository,
     passwordEncryptor,
   )
   const authenticateUserUseCase = new AuthenticateUserUseCase(
-    UsersRepository,
+    usersRepository,
     passwordEncryptor,
   )
   const getUserCheckInsHistoryUseCase = new GetUserCheckInsHistoryUseCase(
-    UsersRepository,
-    CheckInsRepository,
+    usersRepository,
+    checkInsRepository,
   )
   return {
     sut,
@@ -42,6 +43,14 @@ function makeSut(): Sut {
 }
 
 describe('CreateCheckInUseCase', () => {
+  beforeEach(() => {
+    vi.useFakeTimers()
+  })
+
+  afterEach(() => {
+    vi.useRealTimers()
+  })
+
   it('should throw an error if there is not a registered user with the given user id', () => {
     // Arrange
     const userId = 'any_non_existing_user_id'
@@ -51,6 +60,30 @@ describe('CreateCheckInUseCase', () => {
     // Act and Assert
     expect(sut.execute({ userId, gymId })).rejects.toThrowError(
       new InexistentRegisteredUser('id'),
+    )
+  })
+
+  it('should not be able to check ins twice on same day', async () => {
+    // Arrange
+    const gymId = 'any_gym_id'
+    const { sut, createUserUseCase, authenticateUserUseCase } = makeSut()
+
+    await createUserUseCase.execute({
+      name: 'any_name',
+      email: 'any_email',
+      password: 'any_password',
+    })
+
+    const { id: userId } = await authenticateUserUseCase.execute({
+      email: 'any_email',
+      password: 'any_password',
+    })
+
+    // Act
+    await sut.execute({ userId, gymId })
+
+    expect(sut.execute({ userId, gymId })).rejects.toEqual(
+      new UserHasAlreadyCheckedInOnTheseDateError(),
     )
   })
 
@@ -93,5 +126,50 @@ describe('CreateCheckInUseCase', () => {
     expect(firstCheckIn.userId).toBe(userId)
     expect(firstCheckIn.gymId).toEqual(expect.any(String))
     expect(new Date(firstCheckIn.createdAt).getTime()).not.toBeNaN()
+  })
+
+  it('should be able to check on different days', async () => {
+    // Arrange
+    const gymId = 'any_gym_id'
+    const {
+      sut,
+      getUserCheckInsHistoryUseCase,
+      createUserUseCase,
+      authenticateUserUseCase,
+    } = makeSut()
+
+    await createUserUseCase.execute({
+      name: 'any_name',
+      email: 'any_email',
+      password: 'any_password',
+    })
+
+    const { id: userId } = await authenticateUserUseCase.execute({
+      email: 'any_email',
+      password: 'any_password',
+    })
+
+    const initialCheckInsHistory = await getUserCheckInsHistoryUseCase.execute({
+      userId,
+    })
+
+    vi.setSystemTime(new Date('2024-07-27T08:00:00'))
+    await sut.execute({ userId, gymId })
+
+    // Act
+    vi.setSystemTime(new Date('2024-07-28T08:00:00'))
+    await sut.execute({ userId, gymId })
+
+    // Assert
+    const checkInsHistory = await getUserCheckInsHistoryUseCase.execute({
+      userId,
+    })
+    expect(initialCheckInsHistory.length).toBe(0)
+    expect(checkInsHistory.length).toBe(2)
+    const secondCheckIn = checkInsHistory[1]
+    expect(secondCheckIn.id).toEqual(expect.any(String))
+    expect(secondCheckIn.userId).toBe(userId)
+    expect(secondCheckIn.gymId).toEqual(expect.any(String))
+    expect(new Date(secondCheckIn.createdAt).getTime()).not.toBeNaN()
   })
 })

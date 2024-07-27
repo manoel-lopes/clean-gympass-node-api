@@ -3,21 +3,27 @@ import type { UsersRepository } from '@/application/repositories/users-repositor
 import type { CheckInsRepository } from '@/application/repositories/check-ins-repository'
 import { InexistentRegisteredUser } from '@/application/errors'
 import type { CreateCheckInRequest } from './ports'
+import { UserHasAlreadyCheckedInOnTheseDateError } from './errors'
 
 export class CreateCheckInUseCase implements UseCase {
   constructor(
-    private readonly UsersRepository: UsersRepository,
-    private readonly CheckInsRepository: CheckInsRepository,
+    private readonly usersRepository: UsersRepository,
+    private readonly checkInsRepository: CheckInsRepository,
   ) {
     Object.freeze(this)
   }
 
   async execute(req: CreateCheckInRequest): Promise<void> {
     const { userId, gymId } = req
-    const user = await this.UsersRepository.findById(userId)
+    const user = await this.usersRepository.findById(userId)
     if (!user) {
       throw new InexistentRegisteredUser('id')
     }
-    await this.CheckInsRepository.save({ userId, gymId })
+    const hasCheckInOnSameDay =
+      await this.checkInsRepository.findByUserIdOnDate(userId)
+    if (hasCheckInOnSameDay) {
+      throw new UserHasAlreadyCheckedInOnTheseDateError()
+    }
+    await this.checkInsRepository.save({ userId, gymId })
   }
 }

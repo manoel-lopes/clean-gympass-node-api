@@ -7,19 +7,19 @@ import type { GetUserCheckInsHistoryRequest } from './ports'
 
 export class GetUserCheckInsHistoryUseCase implements UseCase {
   constructor(
-    private readonly UsersRepository: UsersRepository,
-    private readonly CheckInsRepository: CheckInsRepository,
+    private readonly usersRepository: UsersRepository,
+    private readonly checkInsRepository: CheckInsRepository,
   ) {
     Object.freeze(this)
   }
 
   async execute(req: GetUserCheckInsHistoryRequest): Promise<CheckIn[]> {
     const { userId } = req
-    const user = await this.UsersRepository.findById(userId)
+    const user = await this.usersRepository.findById(userId)
     if (!user) {
       throw new InexistentRegisteredUser('id')
     }
-    const checkIns = await this.CheckInsRepository.findManyByUserId(userId)
+    const checkIns = await this.checkInsRepository.findManyByUserId(userId)
     return checkIns
   }
 }
