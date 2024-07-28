@@ -4,14 +4,14 @@ import { InexistentRegisteredUser } from '@/application/errors'
 import type { GetUserByEmailRequest, GetUserByEmailResponse } from './ports'
 
 export class GetUserByEmailUseCase implements UseCase {
-  constructor(private readonly UsersRepository: UsersRepository) {
+  constructor(private readonly usersRepository: UsersRepository) {
     Object.freeze(this)
   }
 
   async execute({
     email,
   }: GetUserByEmailRequest): Promise<GetUserByEmailResponse> {
-    const user = await this.UsersRepository.findByEmail(email)
+    const user = await this.usersRepository.findByEmail(email)
     if (!user) {
       throw new InexistentRegisteredUser('email')
     }

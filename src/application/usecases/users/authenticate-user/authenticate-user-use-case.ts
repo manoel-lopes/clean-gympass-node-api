@@ -7,7 +7,7 @@ import { InvalidPasswordError } from './errors'
 
 export class AuthenticateUserUseCase implements UseCase {
   constructor(
-    private readonly UsersRepository: UsersRepository,
+    private readonly usersRepository: UsersRepository,
     private readonly passwordEncryptor: PasswordEncryptor,
   ) {
     Object.freeze(this)
@@ -17,7 +17,7 @@ export class AuthenticateUserUseCase implements UseCase {
     req: AuthenticateUserRequest,
   ): Promise<AuthenticateUserResponse> {
     const { email, password } = req
-    const user = await this.UsersRepository.findByEmail(email)
+    const user = await this.usersRepository.findByEmail(email)
     if (!user) {
       throw new InexistentRegisteredUser('email')
     }

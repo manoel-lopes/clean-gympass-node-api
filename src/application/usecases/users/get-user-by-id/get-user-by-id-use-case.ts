@@ -4,12 +4,12 @@ import { InexistentRegisteredUser } from '@/application/errors'
 import type { GetUserByIdRequest, GetUserByIdResponse } from './ports'
 
 export class GetUserByIdUseCase implements UseCase {
-  constructor(private readonly UsersRepository: UsersRepository) {
+  constructor(private readonly usersRepository: UsersRepository) {
     Object.freeze(this)
   }
 
   async execute(req: GetUserByIdRequest): Promise<GetUserByIdResponse> {
-    const user = await this.UsersRepository.findById(req.userId)
+    const user = await this.usersRepository.findById(req.userId)
     if (!user) {
       throw new InexistentRegisteredUser('id')
     }

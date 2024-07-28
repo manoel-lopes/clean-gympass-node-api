@@ -6,7 +6,7 @@ import { EmailAlreadyBeingUsedError } from './errors'
 
 export class CreateUserUseCase implements UseCase {
   constructor(
-    private readonly UsersRepository: UsersRepository,
+    private readonly usersRepository: UsersRepository,
     private readonly passwordEncryptor: PasswordEncryptor,
   ) {
     Object.freeze(this)
@@ -15,10 +15,10 @@ export class CreateUserUseCase implements UseCase {
   async execute(req: CreateUserRequest): Promise<void> {
     const { name, email, password } = req
     const hashedPassword = await this.passwordEncryptor.hashPassword(password)
-    const hasUserWithEmail = await this.UsersRepository.findByEmail(email)
+    const hasUserWithEmail = await this.usersRepository.findByEmail(email)
     if (hasUserWithEmail) {
       throw new EmailAlreadyBeingUsedError(email)
     }
-    await this.UsersRepository.save({ name, email, password: hashedPassword })
+    await this.usersRepository.save({ name, email, password: hashedPassword })
   }
 }
