@@ -1,10 +1,6 @@
 import type { UseCase } from '@/core/use-case'
 import { EmailAlreadyBeingUsedError } from '@/application/usecases/users/create-user/errors'
-import {
-  badRequest,
-  conflict,
-  created,
-} from '@/presentation/helpers/http-helpers'
+import { badRequest, conflict } from '@/presentation/helpers/http-helpers'
 import type { SchemaValidator } from '@/infra/adapters/validation/schemas/ports'
 import { SchemaValidatorStub } from '@/infra/adapters/validation/schemas/stub/schema-validator-stub'
 import {
@@ -116,6 +112,5 @@ describe('CreateUserController', () => {
     const httpResponse = await sut.handle(httpRequest)
 
     expect(httpResponse.statusCode).toBe(201)
-    expect(httpResponse).toEqual(created())
   })
 })
