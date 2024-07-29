@@ -8,7 +8,7 @@ export class BcryptPasswordEncryptor implements PasswordEncryptor {
     Object.freeze(this)
   }
 
-  hashPassword(password: string): Promise<string> {
+  async hashPassword(password: string) {
     try {
       return bcrypt.hash(password, this.salt)
     } catch (error) {
@@ -16,7 +16,7 @@ export class BcryptPasswordEncryptor implements PasswordEncryptor {
     }
   }
 
-  verifyPassword(password: string, hashedPassword: string): Promise<boolean> {
+  async verifyPassword(password: string, hashedPassword: string) {
     try {
       return bcrypt.compare(password, hashedPassword)
     } catch (error) {
