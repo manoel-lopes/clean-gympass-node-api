@@ -4,7 +4,6 @@ import { InexistentRegisteredUser } from '@/application/errors'
 import type { SchemaValidator } from '@/infra/adapters/validation/schemas/ports'
 import { SchemaValidatorStub } from '@/infra/adapters/validation/schemas/stub/schema-validator-stub'
 import { SchemaParseFailedError } from '@/infra/adapters/validation/errors'
-import { notFound, ok } from '@/presentation/helpers/http-helpers'
 import { GetUserByIdController } from './get-user-by-id-controller'
 
 type Sut = {
@@ -50,7 +49,10 @@ describe('GetUserByIdController', () => {
     const httpResponse = await sut.handle(httpRequest)
 
     expect(httpResponse.statusCode).toBe(404)
-    expect(httpResponse).toEqual(notFound(new InexistentRegisteredUser('id')))
+    expect(httpResponse.body).toEqual({
+      error: 'Not Found',
+      message: `There's no registered user with these id`,
+    })
   })
 
   it('should throw a schema validation error', async () => {
@@ -78,14 +80,13 @@ describe('GetUserByIdController', () => {
 
     const httpResponse = await sut.handle(httpRequest)
 
-    expect(httpResponse).toEqual(
-      ok({
-        id: 'any_id',
-        name: 'any_name',
-        email: 'any_email',
-        password: 'any_password',
-        createdAt: new Date().toString(),
-      }),
-    )
+    expect(httpResponse.statusCode).toBe(200)
+    expect(httpResponse.body).toEqual({
+      id: 'any_id',
+      name: 'any_name',
+      email: 'any_email',
+      password: 'any_password',
+      createdAt: new Date().toString(),
+    })
   })
 })

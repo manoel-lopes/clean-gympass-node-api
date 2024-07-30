@@ -1,6 +1,5 @@
 import type { UseCase } from '@/core/use-case'
 import { EmailAlreadyBeingUsedError } from '@/application/usecases/users/create-user/errors'
-import { badRequest, conflict } from '@/presentation/helpers/http-helpers'
 import type { SchemaValidator } from '@/infra/adapters/validation/schemas/ports'
 import { SchemaValidatorStub } from '@/infra/adapters/validation/schemas/stub/schema-validator-stub'
 import {
@@ -53,9 +52,10 @@ describe('CreateUserController', () => {
     const httpResponse = await sut.handle(httpRequest)
 
     expect(httpResponse.statusCode).toBe(409)
-    expect(httpResponse).toEqual(
-      conflict(new EmailAlreadyBeingUsedError('any_email')),
-    )
+    expect(httpResponse.body).toEqual({
+      error: 'Conflict',
+      message: `The email 'any_email' is already being used`,
+    })
   })
 
   it('should return 400 if password hashing fails', async () => {
@@ -67,9 +67,10 @@ describe('CreateUserController', () => {
     const httpResponse = await sut.handle(httpRequest)
 
     expect(httpResponse.statusCode).toBe(400)
-    expect(httpResponse).toEqual(
-      badRequest(new HashingPasswordError('any_error')),
-    )
+    expect(httpResponse.body).toEqual({
+      error: 'Bad Request',
+      message: 'Error hashing password: any_error',
+    })
   })
 
   it('should return 400 if verify password fails', async () => {
@@ -81,9 +82,10 @@ describe('CreateUserController', () => {
     const httpResponse = await sut.handle(httpRequest)
 
     expect(httpResponse.statusCode).toBe(400)
-    expect(httpResponse).toEqual(
-      badRequest(new VerifyPasswordError('any_error')),
-    )
+    expect(httpResponse.body).toEqual({
+      error: 'Bad Request',
+      message: 'Error verifying password: any_error',
+    })
   })
 
   it('should throw a schema validation error', async () => {

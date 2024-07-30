@@ -9,20 +9,20 @@ export const ok = (data: unknown): HttpResponse => ({
 
 export const badRequest = ({ message }: Error): HttpResponse => ({
   statusCode: 400,
-  body: { error: { message } },
+  body: { error: 'Bad Request', message },
 })
 
-export const forbidden = ({ message }: Error): HttpResponse => ({
+export const forbidden = (): HttpResponse => ({
   statusCode: 403,
-  body: { error: { message } },
+  body: { error: 'Forbidden' },
 })
 
 export const notFound = ({ message }: Error): HttpResponse => ({
   statusCode: 404,
-  body: { error: { message } },
+  body: { error: 'Not Found', message },
 })
 
 export const conflict = ({ message }: Error): HttpResponse => ({
   statusCode: 409,
-  body: { error: { message } },
+  body: { error: 'Conflict', message },
 })

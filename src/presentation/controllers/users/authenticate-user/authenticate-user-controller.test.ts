@@ -5,7 +5,6 @@ import { InexistentRegisteredUser } from '@/application/errors'
 import type { SchemaValidator } from '@/infra/adapters/validation/schemas/ports'
 import { SchemaValidatorStub } from '@/infra/adapters/validation/schemas/stub/schema-validator-stub'
 import { SchemaParseFailedError } from '@/infra/adapters/validation/errors'
-import { notFound, badRequest, ok } from '@/presentation/helpers/http-helpers'
 import { AuthenticateUserController } from './authenticate-user-controller'
 
 type Sut = {
@@ -56,9 +55,10 @@ describe('AuthenticateUserController', () => {
     const httpResponse = await sut.handle(httpRequest)
 
     expect(httpResponse.statusCode).toBe(404)
-    expect(httpResponse).toEqual(
-      notFound(new InexistentRegisteredUser('email')),
-    )
+    expect(httpResponse.body).toEqual({
+      error: 'Not Found',
+      message: `There's no registered user with these email`,
+    })
   })
 
   it('should return 400 if user passes the wrong password', async () => {
@@ -70,7 +70,10 @@ describe('AuthenticateUserController', () => {
     const httpResponse = await sut.handle(httpRequest)
 
     expect(httpResponse.statusCode).toBe(400)
-    expect(httpResponse).toEqual(badRequest(new InvalidPasswordError()))
+    expect(httpResponse.body).toEqual({
+      error: 'Bad Request',
+      message: 'Invalid password',
+    })
   })
 
   it('should throw a schema validation error', async () => {
@@ -100,14 +103,13 @@ describe('AuthenticateUserController', () => {
 
     const httpResponse = await sut.handle(httpRequest)
 
-    expect(httpResponse).toEqual(
-      ok({
-        id: 'any_id',
-        name: 'any_name',
-        email: 'any_email',
-        password: 'any_password',
-        createdAt: new Date().toString(),
-      }),
-    )
+    expect(httpResponse.statusCode).toBe(200)
+    expect(httpResponse.body).toEqual({
+      id: 'any_id',
+      name: 'any_name',
+      email: 'any_email',
+      password: 'any_password',
+      createdAt: new Date().toString(),
+    })
   })
 })
