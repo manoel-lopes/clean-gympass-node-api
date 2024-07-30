@@ -9,9 +9,7 @@ export class AuthenticateUserUseCase implements UseCase {
   constructor(
     private readonly usersRepository: UsersRepository,
     private readonly passwordEncryptor: PasswordEncryptor,
-  ) {
-    Object.freeze(this)
-  }
+  ) {}
 
   async execute(
     req: AuthenticateUserRequest,

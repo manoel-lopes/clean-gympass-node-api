@@ -16,9 +16,7 @@ export class CreateUserController {
   constructor(
     private readonly createUserUseCase: UseCase,
     private readonly createUserSchemaValidator: SchemaValidator,
-  ) {
-    Object.freeze(this)
-  }
+  ) {}
 
   async handle(req: HttpRequest): Promise<HttpResponse> {
     try {

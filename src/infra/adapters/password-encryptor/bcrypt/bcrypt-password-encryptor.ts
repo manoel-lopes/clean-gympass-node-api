@@ -4,9 +4,7 @@ import type { PasswordEncryptor } from '../ports'
 import { HashingPasswordError, VerifyPasswordError } from '../errors'
 
 export class BcryptPasswordEncryptor implements PasswordEncryptor {
-  constructor(private readonly salt = 6) {
-    Object.freeze(this)
-  }
+  constructor(private readonly salt = 6) {}
 
   async hashPassword(password: string) {
     try {

@@ -8,9 +8,7 @@ export class GetUserByIdController {
   constructor(
     private readonly getUserByIdUseCase: UseCase,
     private readonly getUserByIdSchemaValidator: SchemaValidator,
-  ) {
-    Object.freeze(this)
-  }
+  ) {}
 
   async handle(req: HttpRequest): Promise<HttpResponse> {
     try {

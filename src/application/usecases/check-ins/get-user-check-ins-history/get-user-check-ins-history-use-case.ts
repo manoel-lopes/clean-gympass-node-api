@@ -9,9 +9,7 @@ export class GetUserCheckInsHistoryUseCase implements UseCase {
   constructor(
     private readonly usersRepository: UsersRepository,
     private readonly checkInsRepository: CheckInsRepository,
-  ) {
-    Object.freeze(this)
-  }
+  ) {}
 
   async execute(req: GetUserCheckInsHistoryRequest): Promise<CheckIn[]> {
     const { userId } = req

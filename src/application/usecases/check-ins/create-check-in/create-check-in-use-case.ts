@@ -9,9 +9,7 @@ export class CreateCheckInUseCase implements UseCase {
   constructor(
     private readonly usersRepository: UsersRepository,
     private readonly checkInsRepository: CheckInsRepository,
-  ) {
-    Object.freeze(this)
-  }
+  ) {}
 
   async execute(req: CreateCheckInRequest): Promise<void> {
     const { userId, gymId } = req

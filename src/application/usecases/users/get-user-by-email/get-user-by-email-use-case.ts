@@ -4,9 +4,7 @@ import { InexistentRegisteredUser } from '@/application/errors'
 import type { GetUserByEmailRequest, GetUserByEmailResponse } from './ports'
 
 export class GetUserByEmailUseCase implements UseCase {
-  constructor(private readonly usersRepository: UsersRepository) {
-    Object.freeze(this)
-  }
+  constructor(private readonly usersRepository: UsersRepository) {}
 
   async execute({
     email,

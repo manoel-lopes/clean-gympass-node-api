@@ -9,9 +9,7 @@ export class AuthenticateUserController {
   constructor(
     private readonly authenticateUserUseCase: UseCase,
     private readonly authenticateUserSchemaValidator: SchemaValidator,
-  ) {
-    Object.freeze(this)
-  }
+  ) {}
 
   async handle(req: HttpRequest): Promise<HttpResponse> {
     try {
