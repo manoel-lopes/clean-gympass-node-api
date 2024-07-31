@@ -33,6 +33,8 @@
     "zod": "3.23.8"
   },
   "devDependencies": {
+    "@commitlint/cli": "19.3.0",
+    "@commitlint/config-conventional": "19.2.2",
     "@rocketseat/eslint-config": "2.2.2",
     "@total-typescript/ts-reset": "0.5.1",
     "@types/bcrypt": "5.0.2",
