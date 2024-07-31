@@ -1,39 +1,33 @@
 import { vi, describe, it, expect } from 'vitest'
 
+import { GetUserByEmailUseCase } from '@/application/usecases/users'
+import { PasswordEncryptorStub } from '@/infra/adapters/password-encryptor/stub/password-encryptor-stub'
 import type { PasswordEncryptor } from '@/infra/adapters/password-encryptor/ports'
+import { InMemoryUsersRepository } from '@/infra/repositories/in-memory/in-memory-users-repository'
 import {
   HashingPasswordError,
   VerifyPasswordError,
 } from '@/infra/adapters/password-encryptor/errors'
-import { InMemoryUsersRepository } from '@/infra/repositories/in-memory/in-memory-users-repository'
-import { PasswordEncryptorStub } from '@/infra/adapters/password-encryptor/stub/password-encryptor-stub'
-import { GetUserByEmailUseCase } from '../get-user-by-email/get-user-by-email-use-case'
 import { EmailAlreadyBeingUsedError } from './errors'
 import { CreateUserUseCase } from './create-user-use-case'
 
-type Sut = {
-  sut: CreateUserUseCase
-  getUserByEmailUseCase: GetUserByEmailUseCase
-  passwordEncryptorStub: PasswordEncryptor
-}
-
-function makeSut(): Sut {
-  const UsersRepository = new InMemoryUsersRepository()
-  const passwordEncryptorStub = new PasswordEncryptorStub()
-  const sut = new CreateUserUseCase(UsersRepository, passwordEncryptorStub)
-  const getUserByEmailUseCase = new GetUserByEmailUseCase(UsersRepository)
-  return { sut, passwordEncryptorStub, getUserByEmailUseCase }
-}
-
 describe('CreateUserUseCase', () => {
+  let getUserByEmailUseCase: GetUserByEmailUseCase
+  let passwordEncryptorStub: PasswordEncryptor
+  let sut: CreateUserUseCase
   const request = {
     name: 'any_name',
     email: 'any_email',
     password: 'any_password',
   }
+  beforeEach(() => {
+    const usersRepository = new InMemoryUsersRepository()
+    passwordEncryptorStub = new PasswordEncryptorStub()
+    getUserByEmailUseCase = new GetUserByEmailUseCase(usersRepository)
+    sut = new CreateUserUseCase(usersRepository, passwordEncryptorStub)
+  })
 
   it('should throw an error if already has a user registered with the same email', async () => {
-    const { sut } = makeSut()
     await sut.execute(request)
 
     await expect(sut.execute(request)).rejects.toThrowError(
@@ -42,7 +36,6 @@ describe('CreateUserUseCase', () => {
   })
 
   it('should throw an error if the password hashing fails', async () => {
-    const { sut, passwordEncryptorStub } = makeSut()
     vi.spyOn(passwordEncryptorStub, 'hashPassword').mockRejectedValue(
       new HashingPasswordError('any_error'),
     )
@@ -53,7 +46,6 @@ describe('CreateUserUseCase', () => {
   })
 
   it('should throw an error if the password verification fails', async () => {
-    const { sut, passwordEncryptorStub } = makeSut()
     vi.spyOn(passwordEncryptorStub, 'hashPassword').mockRejectedValue(
       new VerifyPasswordError('any_error'),
     )
@@ -64,7 +56,6 @@ describe('CreateUserUseCase', () => {
   })
 
   it('should correctly create a new user', async () => {
-    const { sut, getUserByEmailUseCase, passwordEncryptorStub } = makeSut()
     const passwordEncryptorSpy = vi.spyOn(passwordEncryptorStub, 'hashPassword')
 
     await sut.execute(request)
