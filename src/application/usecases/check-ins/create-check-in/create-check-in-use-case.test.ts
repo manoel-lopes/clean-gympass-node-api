@@ -6,13 +6,13 @@ import {
   CreateUserUseCase,
   AuthenticateUserUseCase,
 } from '@/application/usecases/users'
-import { GetUserCheckInsHistoryUseCase } from '@/application/usecases/check-ins'
+import { GetCheckInsHistoryUseCase } from '@/application/usecases/check-ins'
 import { UserHasAlreadyCheckedInOnTheseDateError } from './errors'
 import { CreateCheckInUseCase } from './create-check-in-use-case'
 
 type Sut = {
   sut: CreateCheckInUseCase
-  getUserCheckInsHistoryUseCase: GetUserCheckInsHistoryUseCase
+  getCheckInsHistoryUseCase: GetCheckInsHistoryUseCase
   createUserUseCase: CreateUserUseCase
   authenticateUserUseCase: AuthenticateUserUseCase
 }
@@ -30,13 +30,13 @@ function makeSut(): Sut {
     usersRepository,
     passwordEncryptor,
   )
-  const getUserCheckInsHistoryUseCase = new GetUserCheckInsHistoryUseCase(
+  const getCheckInsHistoryUseCase = new GetCheckInsHistoryUseCase(
     usersRepository,
     checkInsRepository,
   )
   return {
     sut,
-    getUserCheckInsHistoryUseCase,
+    getCheckInsHistoryUseCase,
     createUserUseCase,
     authenticateUserUseCase,
   }
@@ -92,7 +92,7 @@ describe('CreateCheckInUseCase', () => {
     const gymId = 'any_gym_id'
     const {
       sut,
-      getUserCheckInsHistoryUseCase,
+      getCheckInsHistoryUseCase,
       createUserUseCase,
       authenticateUserUseCase,
     } = makeSut()
@@ -108,7 +108,7 @@ describe('CreateCheckInUseCase', () => {
       password: 'any_password',
     })
 
-    const initialCheckInsHistory = await getUserCheckInsHistoryUseCase.execute({
+    const initialCheckInsHistory = await getCheckInsHistoryUseCase.execute({
       userId,
     })
 
@@ -116,7 +116,7 @@ describe('CreateCheckInUseCase', () => {
     await sut.execute({ userId, gymId })
 
     // Assert
-    const checkInsHistory = await getUserCheckInsHistoryUseCase.execute({
+    const checkInsHistory = await getCheckInsHistoryUseCase.execute({
       userId,
     })
     expect(initialCheckInsHistory.length).toBe(0)
@@ -133,7 +133,7 @@ describe('CreateCheckInUseCase', () => {
     const gymId = 'any_gym_id'
     const {
       sut,
-      getUserCheckInsHistoryUseCase,
+      getCheckInsHistoryUseCase,
       createUserUseCase,
       authenticateUserUseCase,
     } = makeSut()
@@ -149,7 +149,7 @@ describe('CreateCheckInUseCase', () => {
       password: 'any_password',
     })
 
-    const initialCheckInsHistory = await getUserCheckInsHistoryUseCase.execute({
+    const initialCheckInsHistory = await getCheckInsHistoryUseCase.execute({
       userId,
     })
 
@@ -161,7 +161,7 @@ describe('CreateCheckInUseCase', () => {
     await sut.execute({ userId, gymId })
 
     // Assert
-    const checkInsHistory = await getUserCheckInsHistoryUseCase.execute({
+    const checkInsHistory = await getCheckInsHistoryUseCase.execute({
       userId,
     })
     expect(initialCheckInsHistory.length).toBe(0)
