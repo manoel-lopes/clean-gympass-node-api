@@ -10,10 +10,7 @@ import { InvalidPasswordError } from './errors'
 describe('AuthenticateUserUseCase', () => {
   let passwordEncryptorStub: PasswordEncryptor
   let sut: AuthenticateUserUseCase
-  const request = {
-    email: 'any_email',
-    password: 'any_password',
-  }
+  const request = { email: 'any_email', password: 'any_password' }
   beforeEach(async () => {
     const usersRepository = new InMemoryUsersRepository()
     passwordEncryptorStub = new PasswordEncryptorStub()
