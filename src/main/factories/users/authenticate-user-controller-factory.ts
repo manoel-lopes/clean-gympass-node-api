@@ -5,10 +5,10 @@ import { AuthenticateUserZodSchemaValidator } from '@/infra/adapters/validation/
 import { AuthenticateUserController } from '@/presentation/controllers/users'
 
 export function makeAuthenticateUserController(): AuthenticateUserController {
-  const UsersRepository = new PrismaUsersRepository()
+  const usersRepository = new PrismaUsersRepository()
   const passwordEncryptor = new BcryptPasswordEncryptor()
   const authenticateUserUseCase = new AuthenticateUserUseCase(
-    UsersRepository,
+    usersRepository,
     passwordEncryptor,
   )
   const authenticateUserZodSchemaValidator =

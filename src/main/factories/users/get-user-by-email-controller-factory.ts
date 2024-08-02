@@ -4,8 +4,8 @@ import { GetUserByEmailZodSchemaValidator } from '@/infra/adapters/validation/sc
 import { GetUserByEmailController } from '@/presentation/controllers/users'
 
 export function makeGetUserByEmailController(): GetUserByEmailController {
-  const UsersRepository = new PrismaUsersRepository()
-  const getUserByEmail = new GetUserByEmailUseCase(UsersRepository)
+  const usersRepository = new PrismaUsersRepository()
+  const getUserByEmail = new GetUserByEmailUseCase(usersRepository)
   const getUserByEmailSchemaValidator = new GetUserByEmailZodSchemaValidator()
   const getUserByEmailController = new GetUserByEmailController(
     getUserByEmail,

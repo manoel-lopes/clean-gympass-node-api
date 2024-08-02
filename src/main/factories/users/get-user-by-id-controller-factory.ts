@@ -4,8 +4,8 @@ import { GetUserByIdZodSchemaValidator } from '@/infra/adapters/validation/schem
 import { GetUserByIdController } from '@/presentation/controllers/users'
 
 export function makeGetUserByIdController(): GetUserByIdController {
-  const UsersRepository = new PrismaUsersRepository()
-  const getUserById = new GetUserByIdUseCase(UsersRepository)
+  const usersRepository = new PrismaUsersRepository()
+  const getUserById = new GetUserByIdUseCase(usersRepository)
   const getUserByIdSchemaValidator = new GetUserByIdZodSchemaValidator()
   const getUserByIdController = new GetUserByIdController(
     getUserById,
