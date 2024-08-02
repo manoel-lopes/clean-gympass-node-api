@@ -63,8 +63,8 @@ describe('CreateUserUseCase', () => {
 
     expect(passwordEncryptorSpy).toHaveBeenCalledWith('any_password')
     expect(user.id).toEqual(expect.any(String))
-    expect(user.name).toBe('any_name')
-    expect(user.email).toBe('any_email')
+    expect(user.name).toBe(request.name)
+    expect(user.email).toBe(request.email)
     expect(new Date(user.createdAt).getTime()).not.toBeNaN()
   })
 })
