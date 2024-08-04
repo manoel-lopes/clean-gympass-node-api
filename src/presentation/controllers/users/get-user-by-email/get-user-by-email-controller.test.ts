@@ -7,12 +7,6 @@ import { SchemaParseFailedError } from '@/infra/adapters/validation/errors'
 import { notFound, ok } from '@/presentation/helpers/http-helpers'
 import { GetUserByEmailController } from './get-user-by-email-controller'
 
-type Sut = {
-  sut: GetUserByEmailController
-  getUserByEmailUseCase: UseCase
-  getUserByEmailSchemaValidator: SchemaValidator
-}
-
 function makeGetUserByEmailSub(): UseCase {
   class GetUserByEmailStub implements UseCase {
     async execute(): Promise<GetUserByEmailResponse> {
@@ -28,21 +22,22 @@ function makeGetUserByEmailSub(): UseCase {
   return new GetUserByEmailStub()
 }
 
-function makeSut(): Sut {
-  const getUserByEmailUseCase = makeGetUserByEmailSub()
-  const getUserByEmailSchemaValidator = new SchemaValidatorStub()
-  const sut = new GetUserByEmailController(
-    getUserByEmailUseCase,
-    getUserByEmailSchemaValidator,
-  )
-  return { sut, getUserByEmailUseCase, getUserByEmailSchemaValidator }
-}
-
 describe('GetUserByEmailController', () => {
+  let getUserByEmailUseCase: UseCase
+  let getUserByEmailSchemaValidator: SchemaValidator
+  let sut: GetUserByEmailController
   const httpRequest = { params: { email: 'any_email' } }
 
+  beforeEach(() => {
+    getUserByEmailUseCase = makeGetUserByEmailSub()
+    getUserByEmailSchemaValidator = new SchemaValidatorStub()
+    sut = new GetUserByEmailController(
+      getUserByEmailUseCase,
+      getUserByEmailSchemaValidator,
+    )
+  })
+
   it('should return 404 if there is not a user with the given email', async () => {
-    const { sut, getUserByEmailUseCase } = makeSut()
     vi.spyOn(getUserByEmailUseCase, 'execute').mockRejectedValue(
       new InexistentRegisteredUser('email'),
     )
@@ -56,7 +51,6 @@ describe('GetUserByEmailController', () => {
   })
 
   it('should throw a schema validation error', async () => {
-    const { sut, getUserByEmailSchemaValidator } = makeSut()
     vi.spyOn(getUserByEmailSchemaValidator, 'validate').mockImplementation(
       () => {
         throw new SchemaParseFailedError('any_error')
@@ -69,7 +63,6 @@ describe('GetUserByEmailController', () => {
   })
 
   it('should throw the error if is not a known error', async () => {
-    const { sut, getUserByEmailUseCase } = makeSut()
     vi.spyOn(getUserByEmailUseCase, 'execute').mockRejectedValue(
       new Error('any_error'),
     )
@@ -78,8 +71,6 @@ describe('GetUserByEmailController', () => {
   })
 
   it('should return 200 and the user data on success', async () => {
-    const { sut } = makeSut()
-
     const httpResponse = await sut.handle(httpRequest)
 
     expect(httpResponse).toEqual(
