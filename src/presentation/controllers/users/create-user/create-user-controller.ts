@@ -28,13 +28,13 @@ export class CreateUserController {
         return conflict(error)
       }
 
-      if (error instanceof HashingPasswordError) {
+      if (
+        error instanceof HashingPasswordError ||
+        error instanceof VerifyPasswordError
+      ) {
         return badRequest(error)
       }
 
-      if (error instanceof VerifyPasswordError) {
-        return badRequest(error)
-      }
       throw error
     }
   }
