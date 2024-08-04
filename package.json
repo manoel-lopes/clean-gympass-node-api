@@ -29,7 +29,7 @@
     "cross-shell": "0.1.4",
     "fastify": "4.28.1",
     "ioredis": "5.4.1",
-    "tsx": "4.16.2",
+    "tsx": "4.16.5",
     "zod": "3.23.8"
   },
   "devDependencies": {
@@ -41,11 +41,11 @@
     "@types/supertest": "6.0.2",
     "@vitest/coverage-v8": "0.34.6",
     "eslint": "8.57.0",
-    "husky": "9.1.2",
-    "lint-staged": "15.2.7",
+    "husky": "9.1.4",
+    "lint-staged": "15.2.8",
     "prisma": "5.17.0",
     "supertest": "7.0.0",
-    "tsup": "8.2.3",
+    "tsup": "8.2.4",
     "typescript": "5.1.6",
     "vite": "5.3.5",
     "vitest": "0.34.6"
