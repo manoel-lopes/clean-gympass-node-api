@@ -7,12 +7,6 @@ import { SchemaValidatorStub } from '@/infra/adapters/validation/schemas/stub/sc
 import { SchemaParseFailedError } from '@/infra/adapters/validation/errors'
 import { AuthenticateUserController } from './authenticate-user-controller'
 
-type Sut = {
-  sut: AuthenticateUserController
-  authenticateUserUseCase: UseCase
-  authenticateUserSchemaValidator: SchemaValidator
-}
-
 function makeAuthenticateUserUseCaseSub(): UseCase {
   class AuthenticateUserUseCaseStub implements UseCase {
     async execute(): Promise<AuthenticateUserResponse> {
@@ -28,17 +22,10 @@ function makeAuthenticateUserUseCaseSub(): UseCase {
   return new AuthenticateUserUseCaseStub()
 }
 
-function makeSut(): Sut {
-  const authenticateUserUseCase = makeAuthenticateUserUseCaseSub()
-  const authenticateUserSchemaValidator = new SchemaValidatorStub()
-  const sut = new AuthenticateUserController(
-    authenticateUserUseCase,
-    authenticateUserSchemaValidator,
-  )
-  return { sut, authenticateUserUseCase, authenticateUserSchemaValidator }
-}
-
 describe('AuthenticateUserController', () => {
+  let authenticateUserUseCase = makeAuthenticateUserUseCaseSub()
+  let authenticateUserSchemaValidator: SchemaValidator
+  let sut: AuthenticateUserController
   const httpRequest = {
     body: {
       email: 'any_email',
@@ -46,8 +33,16 @@ describe('AuthenticateUserController', () => {
     },
   }
 
+  beforeEach(() => {
+    authenticateUserUseCase = makeAuthenticateUserUseCaseSub()
+    authenticateUserSchemaValidator = new SchemaValidatorStub()
+    sut = new AuthenticateUserController(
+      authenticateUserUseCase,
+      authenticateUserSchemaValidator,
+    )
+  })
+
   it('should return 404 if there is not a user with the given email', async () => {
-    const { sut, authenticateUserUseCase } = makeSut()
     vi.spyOn(authenticateUserUseCase, 'execute').mockRejectedValue(
       new InexistentRegisteredUser('email'),
     )
@@ -62,7 +57,6 @@ describe('AuthenticateUserController', () => {
   })
 
   it('should return 400 if user passes the wrong password', async () => {
-    const { sut, authenticateUserUseCase } = makeSut()
     vi.spyOn(authenticateUserUseCase, 'execute').mockRejectedValue(
       new InvalidPasswordError(),
     )
@@ -77,7 +71,6 @@ describe('AuthenticateUserController', () => {
   })
 
   it('should throw a schema validation error', async () => {
-    const { sut, authenticateUserSchemaValidator } = makeSut()
     vi.spyOn(authenticateUserSchemaValidator, 'validate').mockImplementation(
       () => {
         throw new SchemaParseFailedError('any_error')
@@ -90,7 +83,6 @@ describe('AuthenticateUserController', () => {
   })
 
   it('should throw the error if is not a known error', async () => {
-    const { sut, authenticateUserUseCase } = makeSut()
     vi.spyOn(authenticateUserUseCase, 'execute').mockRejectedValue(
       new Error('any_error'),
     )
@@ -99,8 +91,6 @@ describe('AuthenticateUserController', () => {
   })
 
   it('should return 200 and the authenticated user data on success', async () => {
-    const { sut } = makeSut()
-
     const httpResponse = await sut.handle(httpRequest)
 
     expect(httpResponse.statusCode).toBe(200)
