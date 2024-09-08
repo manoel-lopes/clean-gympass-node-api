@@ -6,7 +6,7 @@ import {
   conflict,
   badRequest,
 } from '@/presentation/helpers/http-helpers'
-import { EmailAlreadyBeingUsedError } from '@/application/usecases/users/create-user/errors'
+import { EmailAlreadyBeingUsedError } from '@/application/usecases/create-user/errors'
 import {
   HashingPasswordError,
   VerifyPasswordError,

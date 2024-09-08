@@ -1,6 +1,6 @@
 import type { UseCase } from '@/core/use-case'
-import type { UsersRepository } from '@/application/repositories/users-repository'
-import type { PasswordHashingProvider } from '@/infra/adapters/cryptography/password-encryptor/ports/lib/password-encryptor'
+import type { UsersRepository } from '@/application/repositories/users.repository'
+import type { PasswordHashingProvider } from '@/infra/providers/cryptography/ports'
 import { InexistentRegisteredUser } from '@/application/errors'
 import type { AuthenticateUserRequest, AuthenticateUserResponse } from './ports'
 import { InvalidPasswordError } from './errors'

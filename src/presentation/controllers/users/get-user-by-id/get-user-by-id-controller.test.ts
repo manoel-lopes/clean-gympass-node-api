@@ -1,5 +1,5 @@
 import type { UseCase } from '@/core/use-case'
-import type { GetUserByIdResponse } from '@/application/usecases/users/get-user-by-id/ports'
+import type { GetUserByIdResponse } from '@/application/usecases/get-user-by-id/ports'
 import { InexistentRegisteredUser } from '@/application/errors'
 import type { SchemaValidator } from '@/infra/adapters/validation/schemas/ports'
 import { SchemaValidatorStub } from '@/infra/adapters/validation/schemas/stub/schema-validator-stub'

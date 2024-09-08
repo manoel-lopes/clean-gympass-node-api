@@ -2,7 +2,7 @@ import type { UseCase } from '@/core/use-case'
 import type { SchemaValidator } from '@/infra/adapters/validation/schemas/ports'
 import type { HttpRequest, HttpResponse } from '@/infra/adapters/http/ports'
 import { InexistentRegisteredUser } from '@/application/errors'
-import { InvalidPasswordError } from '@/application/usecases/users/authenticate-user/errors'
+import { InvalidPasswordError } from '@/application/usecases/authenticate-user/errors'
 import { ok, notFound, badRequest } from '@/presentation/helpers/http-helpers'
 
 export class AuthenticateUserController {

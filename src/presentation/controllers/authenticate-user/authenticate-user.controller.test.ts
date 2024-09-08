@@ -1,11 +1,11 @@
 import type { UseCase } from '@/core/use-case'
-import type { AuthenticateUserResponse } from '@/application/usecases/users/authenticate-user/ports'
-import { InvalidPasswordError } from '@/application/usecases/users/authenticate-user/errors'
+import type { AuthenticateUserResponse } from '@/application/usecases/authenticate-user/ports'
+import { InvalidPasswordError } from '@/application/usecases/authenticate-user/errors'
 import { InexistentRegisteredUser } from '@/application/errors'
 import type { SchemaValidator } from '@/infra/adapters/validation/schemas/ports'
 import { SchemaValidatorStub } from '@/infra/adapters/validation/schemas/stub/schema-validator-stub'
 import { SchemaParseFailedError } from '@/infra/adapters/validation/errors'
-import { AuthenticateUserController } from './authenticate-user-controller'
+import { AuthenticateUserController } from './authenticate-user.controller'
 
 function makeAuthenticateUserUseCaseSub(): UseCase {
   class AuthenticateUserUseCaseStub implements UseCase {
@@ -26,12 +26,7 @@ describe('AuthenticateUserController', () => {
   let authenticateUserUseCase = makeAuthenticateUserUseCaseSub()
   let authenticateUserSchemaValidator: SchemaValidator
   let sut: AuthenticateUserController
-  const httpRequest = {
-    body: {
-      email: 'any_email',
-      password: 'any_password',
-    },
-  }
+  const httpRequest = { body: { email: 'any_email', password: 'any_password' } }
 
   beforeEach(() => {
     authenticateUserUseCase = makeAuthenticateUserUseCaseSub()

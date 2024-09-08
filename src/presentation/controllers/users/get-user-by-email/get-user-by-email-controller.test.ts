@@ -1,5 +1,5 @@
 import type { UseCase } from '@/core/use-case'
-import type { GetUserByEmailResponse } from '@/application/usecases/users/get-user-by-email/ports'
+import type { GetUserByEmailResponse } from '@/application/usecases/get-user-by-email/ports'
 import { InexistentRegisteredUser } from '@/application/errors'
 import type { SchemaValidator } from '@/infra/adapters/validation/schemas/ports'
 import { SchemaValidatorStub } from '@/infra/adapters/validation/schemas/stub/schema-validator-stub'

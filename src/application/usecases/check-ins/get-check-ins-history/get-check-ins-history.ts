@@ -1,6 +1,6 @@
 import type { UseCase } from '@/core/use-case'
 import type { CheckIn } from '@/domain/models/check-in'
-import type { UsersRepository } from '@/application/repositories/users-repository'
+import type { UsersRepository } from '@/application/repositories/users.repository'
 import type { CheckInsRepository } from '@/application/repositories/check-ins-repository'
 import { InexistentRegisteredUser } from '@/application/errors'
 import type { GetCheckInsHistoryRequest } from './ports'

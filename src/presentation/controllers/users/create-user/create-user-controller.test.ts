@@ -1,5 +1,5 @@
 import type { UseCase } from '@/core/use-case'
-import { EmailAlreadyBeingUsedError } from '@/application/usecases/users/create-user/errors'
+import { EmailAlreadyBeingUsedError } from '@/application/usecases/create-user/errors'
 import type { SchemaValidator } from '@/infra/adapters/validation/schemas/ports'
 import { SchemaValidatorStub } from '@/infra/adapters/validation/schemas/stub/schema-validator-stub'
 import {

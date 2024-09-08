@@ -1,5 +1,5 @@
 import type { UseCase } from '@/core/use-case'
-import type { UsersRepository } from '@/application/repositories/users-repository'
+import type { UsersRepository } from '@/application/repositories/users.repository'
 import type { PasswordHashingProvider } from '@/infra/providers/cryptography/ports'
 
 import type { CreateUserRequest } from './ports'

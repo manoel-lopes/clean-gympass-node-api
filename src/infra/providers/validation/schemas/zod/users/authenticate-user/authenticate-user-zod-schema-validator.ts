@@ -1,7 +1,7 @@
 import { z } from 'zod'
 
 import type { SchemaValidator } from '@/infra/adapters/validation/schemas/ports'
-import type { AuthenticateUserRequest } from '@/application/usecases/users/authenticate-user/ports'
+import type { AuthenticateUserRequest } from '@/application/usecases/authenticate-user/ports'
 import { SchemaParser } from '@/infra/adapters/validation/helpers/schema-parser'
 
 type AuthenticateUserHttpRequest = {
