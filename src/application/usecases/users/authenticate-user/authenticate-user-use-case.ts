@@ -1,6 +1,6 @@
 import type { UseCase } from '@/core/use-case'
 import type { UsersRepository } from '@/application/repositories/users-repository'
-import type { PasswordEncryptor } from '@/infra/adapters/password-encryptor/ports/lib/password-encryptor'
+import type { PasswordHashingProvider } from '@/infra/adapters/cryptography/password-encryptor/ports/lib/password-encryptor'
 import { InexistentRegisteredUser } from '@/application/errors'
 import type { AuthenticateUserRequest, AuthenticateUserResponse } from './ports'
 import { InvalidPasswordError } from './errors'
@@ -8,7 +8,7 @@ import { InvalidPasswordError } from './errors'
 export class AuthenticateUserUseCase implements UseCase {
   constructor(
     private readonly usersRepository: UsersRepository,
-    private readonly passwordEncryptor: PasswordEncryptor,
+    private readonly passwordProvider: PasswordHashingProvider,
   ) {}
 
   async execute(
@@ -20,7 +20,7 @@ export class AuthenticateUserUseCase implements UseCase {
       throw new InexistentRegisteredUser('email')
     }
 
-    const doesPasswordMatch = await this.passwordEncryptor.verifyPassword(
+    const doesPasswordMatch = await this.passwordProvider.compare(
       password,
       user.password,
     )

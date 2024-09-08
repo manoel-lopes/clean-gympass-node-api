@@ -5,7 +5,7 @@ import { SchemaValidatorStub } from '@/infra/adapters/validation/schemas/stub/sc
 import {
   HashingPasswordError,
   VerifyPasswordError,
-} from '@/infra/adapters/password-encryptor/errors'
+} from '@/infra/providers/cryptography/errors'
 import { SchemaParseFailedError } from '@/infra/adapters/validation/errors'
 import { CreateUserController } from './create-user-controller'
 

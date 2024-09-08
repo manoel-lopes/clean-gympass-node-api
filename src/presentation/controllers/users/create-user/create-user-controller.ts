@@ -10,7 +10,7 @@ import { EmailAlreadyBeingUsedError } from '@/application/usecases/users/create-
 import {
   HashingPasswordError,
   VerifyPasswordError,
-} from '@/infra/adapters/password-encryptor/errors'
+} from '@/infra/providers/cryptography/errors'
 
 export class CreateUserController {
   constructor(

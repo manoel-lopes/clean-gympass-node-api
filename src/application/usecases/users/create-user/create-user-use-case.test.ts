@@ -1,30 +1,31 @@
 import { vi, describe, it, expect } from 'vitest'
 
 import { GetUserByEmailUseCase } from '@/application/usecases/users'
-import { PasswordEncryptorStub } from '@/infra/adapters/password-encryptor/stub/password-encryptor-stub'
-import type { PasswordEncryptor } from '@/infra/adapters/password-encryptor/ports'
+import type { PasswordHashingProvider } from '@/infra/providers/cryptography/ports'
+import { PasswordHashingStubProvider } from '@/infra/providers/cryptography/password-hashing/stub/password-hashing-stub.provider'
 import { InMemoryUsersRepository } from '@/infra/repositories/in-memory/in-memory-users-repository'
 import {
   HashingPasswordError,
   VerifyPasswordError,
-} from '@/infra/adapters/password-encryptor/errors'
+} from '@/infra/providers/cryptography/errors'
 import { EmailAlreadyBeingUsedError } from './errors'
 import { CreateUserUseCase } from './create-user-use-case'
 
 describe('CreateUserUseCase', () => {
   let getUserByEmailUseCase: GetUserByEmailUseCase
-  let passwordEncryptorStub: PasswordEncryptor
+  let passwordHashingProvider: PasswordHashingProvider
   let sut: CreateUserUseCase
   const request = {
     name: 'any_name',
     email: 'any_email',
     password: 'any_password',
   }
+
   beforeEach(() => {
     const usersRepository = new InMemoryUsersRepository()
-    passwordEncryptorStub = new PasswordEncryptorStub()
+    passwordHashingProvider = new PasswordHashingStubProvider()
     getUserByEmailUseCase = new GetUserByEmailUseCase(usersRepository)
-    sut = new CreateUserUseCase(usersRepository, passwordEncryptorStub)
+    sut = new CreateUserUseCase(usersRepository, passwordHashingProvider)
   })
 
   it('should throw an error if already has a user registered with the same email', async () => {
@@ -36,7 +37,7 @@ describe('CreateUserUseCase', () => {
   })
 
   it('should throw an error if the password hashing fails', async () => {
-    vi.spyOn(passwordEncryptorStub, 'hashPassword').mockRejectedValue(
+    vi.spyOn(passwordHashingProvider, 'hash').mockRejectedValue(
       new HashingPasswordError('any_error'),
     )
 
@@ -46,7 +47,7 @@ describe('CreateUserUseCase', () => {
   })
 
   it('should throw an error if the password verification fails', async () => {
-    vi.spyOn(passwordEncryptorStub, 'hashPassword').mockRejectedValue(
+    vi.spyOn(passwordHashingProvider, 'hash').mockRejectedValue(
       new VerifyPasswordError('any_error'),
     )
 
@@ -56,7 +57,7 @@ describe('CreateUserUseCase', () => {
   })
 
   it('should correctly create a new user', async () => {
-    const passwordEncryptorSpy = vi.spyOn(passwordEncryptorStub, 'hashPassword')
+    const passwordEncryptorSpy = vi.spyOn(passwordHashingProvider, 'hash')
 
     await sut.execute(request)
     const user = await getUserByEmailUseCase.execute({ email: 'any_email' })

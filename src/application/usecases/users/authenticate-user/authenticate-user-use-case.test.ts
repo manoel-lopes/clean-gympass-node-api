@@ -1,20 +1,21 @@
 import { vi, describe, it, expect } from 'vitest'
 
 import { InexistentRegisteredUser } from '@/application/errors'
-import type { PasswordEncryptor } from '@/infra/adapters/password-encryptor/ports'
+import type { PasswordHashingProvider } from '@/infra/providers/cryptography/ports'
 import { InMemoryUsersRepository } from '@/infra/repositories/in-memory/in-memory-users-repository'
-import { PasswordEncryptorStub } from '@/infra/adapters/password-encryptor/stub/password-encryptor-stub'
+import { PasswordHashingStubProvider } from '@/infra/providers/cryptography/password-hashing/stub/password-hashing-stub.provider'
 import { AuthenticateUserUseCase } from './authenticate-user-use-case'
 import { InvalidPasswordError } from './errors'
 
 describe('AuthenticateUserUseCase', () => {
-  let passwordEncryptorStub: PasswordEncryptor
+  let passwordHashingProvider: PasswordHashingProvider
   let sut: AuthenticateUserUseCase
   const request = { email: 'any_email', password: 'any_password' }
+
   beforeEach(async () => {
     const usersRepository = new InMemoryUsersRepository()
-    passwordEncryptorStub = new PasswordEncryptorStub()
-    sut = new AuthenticateUserUseCase(usersRepository, passwordEncryptorStub)
+    passwordHashingProvider = new PasswordHashingStubProvider()
+    sut = new AuthenticateUserUseCase(usersRepository, passwordHashingProvider)
     await usersRepository.save({ name: 'any_name', ...request })
   })
 
@@ -25,9 +26,7 @@ describe('AuthenticateUserUseCase', () => {
   })
 
   it('should throw an error if the given password does not match the stored password', async () => {
-    vi.spyOn(passwordEncryptorStub, 'verifyPassword').mockResolvedValueOnce(
-      false,
-    )
+    vi.spyOn(passwordHashingProvider, 'compare').mockResolvedValueOnce(false)
 
     await expect(sut.execute(request)).rejects.toThrowError(
       new InvalidPasswordError(),
