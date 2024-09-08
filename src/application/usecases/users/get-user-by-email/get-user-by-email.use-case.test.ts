@@ -1,6 +1,6 @@
 import { InMemoryUsersRepository } from '@/infra/repositories/in-memory/in-memory-users.repository'
 import { InexistentRegisteredUser } from '@/application/errors'
-import { GetUserByEmailUseCase } from './get-user-by-email-use-case'
+import { GetUserByEmailUseCase } from './get-user-by-email.use-case'
 
 describe('GetUserByEmailUseCase', () => {
   let sut: GetUserByEmailUseCase
