@@ -8,7 +8,9 @@ export abstract class SchemaParser {
       return parsedSchema.data
     }
 
-    const { path, message } = parsedSchema.error.errors[0]
+    const error = parsedSchema.error.errors[0]
+    const path = error?.path || []
+    const message = error?.message || 'Unknown error'
     const errorMessage = this.formatErrorMessage(path, message)
     throw new SchemaParseFailedError(errorMessage)
   }
@@ -16,30 +18,60 @@ export abstract class SchemaParser {
   private static formatErrorMessage(
     path: (string | number)[],
     message: string,
-  ): string {
+  ) {
     const [object, property] = path
-    const normalizedMessage = message
-      .toLowerCase()
-      .replace('string must', 'must')
+    const normalizedMessage = this.normalizeMessage(message)
 
     if (!property) {
-      return `Empty request ${object}`
+      return this.formatEmptyRequestError(object)
     }
 
-    if (normalizedMessage.includes('invalid')) {
-      return `${this.capitalizeFirstLetter(normalizedMessage)} on request ${object === 'query' ? 'query params' : object}`
+    if (object) {
+      if (this.isInvalidPropertyErrorMessage(normalizedMessage)) {
+        return this.formatInvalidFieldError(object, normalizedMessage)
+      }
+      return this.formatFieldError(object, property, normalizedMessage)
     }
+    return this.capitalizeFirstLetter(normalizedMessage)
+  }
+
+  private static normalizeMessage(message: string): string {
+    return message.toLowerCase().replace('string must', 'must')
+  }
+
+  private static formatEmptyRequestError(object?: string | number) {
+    return !object ? 'Empty request' : `Empty request ${object}`
+  }
+
+  private static isInvalidPropertyErrorMessage(message: string) {
+    return message.includes('invalid')
+  }
+
+  private static formatInvalidFieldError(
+    object: string | number,
+    message: string,
+  ): string {
+    const objectType = object === 'query' ? 'query params' : object
+    return `${this.capitalizeFirstLetter(message)} on request ${objectType}`
+  }
+
+  private static formatFieldError(
+    object: string | number,
+    property: string | number,
+    message: string,
+  ): string {
+    const objectLabel = this.getObjectLabel(object)
+    const messageText = message === 'required' ? 'is required' : message
+    return `${objectLabel} '${property}' ${messageText}`
+  }
+
+  private static getObjectLabel(object: string | number): string {
     const objMapper: Record<string, string> = {
       body: 'Field',
       params: 'Route',
       query: 'Query',
     }
-    const firstWord = `${objMapper[`${object}`]} param`
-    return `${firstWord} '${property}' ${
-      normalizedMessage === 'required'
-        ? 'is ' + normalizedMessage
-        : normalizedMessage
-    }`
+    return objMapper[`${object}`] || 'Unknown'
   }
 
   private static capitalizeFirstLetter(text: string): string {
