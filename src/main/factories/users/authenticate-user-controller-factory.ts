@@ -1,4 +1,4 @@
-import { PrismaUsersRepository } from '@/infra/repositories/prisma/prisma-users-repository'
+import { PrismaUsersRepository } from '@/infra/repositories/prisma/prisma-users.repository'
 import { BcryptProvider } from '@/infra/providers/cryptography/password-hashing/bcrypt/bcrypt.provider'
 import { AuthenticateUserUseCase } from '@/application/usecases/users'
 import { AuthenticateUserZodSchemaValidator } from '@/infra/adapters/validation/schemas/zod/users'

@@ -5,5 +5,3 @@ export type User = {
   password: string
   createdAt: Date
 }
-
-export type UserInputData = Omit<User, 'id' | 'createdAt'>

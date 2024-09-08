@@ -1,4 +1,4 @@
-import { PrismaUsersRepository } from '@/infra/repositories/prisma/prisma-users-repository'
+import { PrismaUsersRepository } from '@/infra/repositories/prisma/prisma-users.repository'
 import { GetUserByEmailUseCase } from '@/application/usecases/users'
 import { GetUserByEmailZodSchemaValidator } from '@/infra/adapters/validation/schemas/zod/users'
 import { GetUserByEmailController } from '@/presentation/controllers/users'

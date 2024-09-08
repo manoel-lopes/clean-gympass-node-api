@@ -3,7 +3,7 @@ import { vi, describe, it, expect } from 'vitest'
 import { GetUserByEmailUseCase } from '@/application/usecases/users'
 import type { PasswordHashingProvider } from '@/infra/providers/cryptography/ports'
 import { PasswordHashingStubProvider } from '@/infra/providers/cryptography/password-hashing/stub/password-hashing-stub.provider'
-import { InMemoryUsersRepository } from '@/infra/repositories/in-memory/in-memory-users-repository'
+import { InMemoryUsersRepository } from '@/infra/repositories/in-memory/in-memory-users.repository'
 import {
   HashingPasswordError,
   VerifyPasswordError,

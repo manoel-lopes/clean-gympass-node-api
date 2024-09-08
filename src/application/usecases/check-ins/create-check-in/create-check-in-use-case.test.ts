@@ -2,8 +2,8 @@ import { randomUUID } from 'node:crypto'
 
 import { GetCheckInsHistoryUseCase } from '@/application/usecases/check-ins'
 import { InexistentRegisteredUser } from '@/application/errors'
-import { InMemoryUsersRepository } from '@/infra/repositories/in-memory/in-memory-users-repository'
-import { InMemoryCheckInsRepository } from '@/infra/repositories/in-memory/in-memory-check-ins-repository'
+import { InMemoryUsersRepository } from '@/infra/repositories/in-memory/in-memory-users.repository'
+import { InMemoryCheckInsRepository } from '@/infra/repositories/in-memory/in-memory-check-ins.repository'
 import { UserHasAlreadyCheckedInOnTheseDateError } from './errors'
 import { CreateCheckInUseCase } from './create-check-in-use-case'
 

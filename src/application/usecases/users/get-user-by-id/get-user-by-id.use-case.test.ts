@@ -1,8 +1,8 @@
 import { describe, it, expect } from 'vitest'
 
-import { InMemoryUsersRepository } from '@/infra/repositories/in-memory/in-memory-users-repository'
+import { InMemoryUsersRepository } from '@/infra/repositories/in-memory/in-memory-users.repository'
 import { InexistentRegisteredUser } from '@/application/errors'
-import { GetUserByIdUseCase } from './get-user-by-id-use-case'
+import { GetUserByIdUseCase } from './get-user-by-id.use-case'
 
 describe('GetUserByIdUseCase', () => {
   let sut: GetUserByIdUseCase

@@ -1,4 +1,5 @@
-import type { User, UserInputData } from '@/domain/models/user'
+import type { UserInputData } from '@/domain/models/user/ports/user-input'
+import type { User } from '@/domain/models/user/user.model'
 
 export type UsersRepository = {
   save(userData: UserInputData): Promise<void>

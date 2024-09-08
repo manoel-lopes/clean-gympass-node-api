@@ -5,5 +5,3 @@ export type CheckIn = {
   userId: string
   gymId: string
 }
-
-export type CheckInInputData = Pick<CheckIn, 'userId' | 'gymId'>

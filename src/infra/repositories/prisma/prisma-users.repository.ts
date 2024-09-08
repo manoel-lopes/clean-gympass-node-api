@@ -1,6 +1,7 @@
-import type { UsersRepository } from '@/application/repositories/users-repository'
-import type { User, UserInputData } from '@/domain/models/user'
 import { prisma } from '@/infra/db/client'
+import type { UsersRepository } from '@/application/repositories/users.repository'
+import type { UserInputData } from '@/domain/models/user/ports/user-input'
+import type { User } from '@/domain/models/user/user.model'
 
 export class PrismaUsersRepository implements UsersRepository {
   async save(userData: UserInputData): Promise<void> {

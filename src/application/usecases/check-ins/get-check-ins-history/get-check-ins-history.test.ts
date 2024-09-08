@@ -1,5 +1,5 @@
-import { InMemoryUsersRepository } from '@/infra/repositories/in-memory/in-memory-users-repository'
-import { InMemoryCheckInsRepository } from '@/infra/repositories/in-memory/in-memory-check-ins-repository'
+import { InMemoryUsersRepository } from '@/infra/repositories/in-memory/in-memory-users.repository'
+import { InMemoryCheckInsRepository } from '@/infra/repositories/in-memory/in-memory-check-ins.repository'
 import { InexistentRegisteredUser } from '@/application/errors'
 import { GetCheckInsHistoryUseCase } from './get-check-ins-history'
 

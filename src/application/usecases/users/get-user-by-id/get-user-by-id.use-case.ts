@@ -1,5 +1,5 @@
 import type { UseCase } from '@/core/use-case'
-import type { UsersRepository } from '@/application/repositories/users-repository'
+import type { UsersRepository } from '@/application/repositories/users.repository'
 import { InexistentRegisteredUser } from '@/application/errors'
 import type { GetUserByIdRequest, GetUserByIdResponse } from './ports'
 

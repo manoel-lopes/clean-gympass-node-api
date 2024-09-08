@@ -2,7 +2,7 @@ import { vi, describe, it, expect } from 'vitest'
 
 import { InexistentRegisteredUser } from '@/application/errors'
 import type { PasswordHashingProvider } from '@/infra/providers/cryptography/ports'
-import { InMemoryUsersRepository } from '@/infra/repositories/in-memory/in-memory-users-repository'
+import { InMemoryUsersRepository } from '@/infra/repositories/in-memory/in-memory-users.repository'
 import { PasswordHashingStubProvider } from '@/infra/providers/cryptography/password-hashing/stub/password-hashing-stub.provider'
 import { AuthenticateUserUseCase } from './authenticate-user-use-case'
 import { InvalidPasswordError } from './errors'
