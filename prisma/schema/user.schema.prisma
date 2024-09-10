@@ -3,7 +3,7 @@ model User {
     email    String   @unique
     name     String
     password String
-    created_at DateTime @default(now())
+    createdAt DateTime @default(now()) @map("created_at")
 
     @@map("users")
 }

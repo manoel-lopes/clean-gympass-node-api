@@ -1,7 +1,7 @@
 import crypto from 'node:crypto'
 
 import type { UsersRepository } from '@/application/repositories/users.repository'
-import type { User, UserInputData } from '@/domain/models/user'
+import type { User, UserInputData } from '@/domain/models/user/user.model'
 
 type UserData = UserInputData & { id?: string }
 
